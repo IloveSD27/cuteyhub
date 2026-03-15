@@ -39,13 +39,16 @@
     .toggle-track.apart-mode .toggle-knob{transform:translateX(22px);background:#fff}
     .countdown-bar{background:var(--apt-accent);color:#fff;text-align:center;padding:8px;font-size:11px;font-weight:500;display:none;flex-shrink:0;cursor:pointer}
     .countdown-bar.visible{display:block}
+    .notif-banner{background:var(--accent);color:#fff;padding:10px 16px;font-size:12px;display:none;align-items:center;gap:10px;flex-shrink:0}
+    .notif-banner.visible{display:flex}
+    .notif-banner button{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
     .screen{display:none;flex:1;flex-direction:column;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
     .screen.active{display:flex}
     .nav{display:flex;background:var(--surface);border-top:1px solid var(--border);padding-top:8px;padding-bottom:max(env(safe-area-inset-bottom),12px);flex-shrink:0;transition:background .5s,border-color .5s}
-    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .nav-item{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent}
     .nav-svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s,transform .2s}
     .nav-item.active .nav-svg{stroke:var(--accent);transform:scale(1.1)}
-    .nav-label{font-size:8px;color:var(--muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
+    .nav-label{font-size:7px;color:var(--muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
     .nav-item.active .nav-label{color:var(--accent)}
     .sec-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:3px;color:var(--text)}
     .sec-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
@@ -61,7 +64,7 @@
     .qi-label{font-size:9px;color:var(--muted)}
     .text-input{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:9px 12px;font-size:16px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s,background .5s,color .5s;-webkit-appearance:none}
     .text-input:focus{border-color:var(--accent)}
-    .btn{background:var(--accent);color:#fff;border:none;border-radius:11px;padding:9px 14px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:opacity .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+    .btn{background:var(--accent);color:#fff;border:none;border-radius:11px;padding:9px 14px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;white-space:nowrap;-webkit-tap-highlight-color:transparent}
     .btn:active{opacity:.8}
     .btn-sm{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:8px 12px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;white-space:nowrap;-webkit-tap-highlight-color:transparent}
     .btn-sm.outline{background:transparent;color:var(--accent);border:1px solid var(--accent)}
@@ -76,19 +79,24 @@
     .shop-item.done .check-circle::after{opacity:1}
     .shop-name{font-size:14px;flex:1;color:var(--text)}
     .shop-del{font-size:18px;color:var(--muted);cursor:pointer;padding:0 4px}
-    .hug-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
-    .hug-btn{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:14px 4px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-    .hug-btn:active{transform:scale(0.93)}
-    .hb-icon{font-size:24px;display:block}
-    .hb-label{font-size:9px;color:var(--muted);margin-top:4px;display:block}
-    .popup-area{min-height:60px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-    .popup-msg{font-size:32px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+    /* CONNECT */
+    .connect-intro{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
+    .connect-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+    .send-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+    .send-btn{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px 8px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform .15s,background .2s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+    .send-btn:active{transform:scale(0.94)}
+    .send-btn.sending{background:var(--accent);border-color:var(--accent)}
+    .send-btn.sending .send-label{color:#fff}
+    .send-icon{font-size:32px;line-height:1}
+    .send-label{font-size:11px;font-weight:500;color:var(--muted);text-align:center}
+    .received-area{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:16px;min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+    .received-emoji{font-size:40px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+    .received-text{font-size:13px;color:var(--muted)}
+    .received-time{font-size:10px;color:var(--muted);opacity:.6}
     @keyframes popIn{from{transform:scale(0) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
-    .daily-q{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px}
-    .dq-label{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px;font-weight:500}
-    .dq-question{font-family:'DM Serif Display',serif;font-size:15px;color:var(--text);margin-bottom:10px;line-height:1.4}
-    .dq-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 11px;font-size:16px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;resize:none;height:70px;-webkit-appearance:none}
-    .dq-input:focus{border-color:var(--accent)}
+    .last-sent{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:16px}
+    .last-sent-label{font-size:11px;color:var(--muted);flex:1}
+    /* ENT */
     .ent-tabs{display:flex;gap:5px;margin-bottom:14px}
     .ent-tab{flex:1;padding:8px 4px;text-align:center;border-radius:10px;border:1px solid var(--border);font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);background:var(--surface);transition:background .2s,color .2s;-webkit-tap-highlight-color:transparent}
     .ent-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -155,7 +163,7 @@
     .gmaps-star{color:#F4B400;font-size:12px}
     .gmaps-score{font-size:12px;font-weight:500;color:var(--text)}
     .gmaps-label{font-size:10px;color:var(--muted)}
-    .rest-avg-pill{background:var(--accent);color:#fff;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;flex-shrink:0;cursor:pointer}
+    .rest-avg-pill{background:var(--accent);color:#fff;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;flex-shrink:0}
     .visited-badge{font-size:9px;padding:3px 8px;border-radius:8px;font-weight:500;background:#EDE9FF;color:#5B3FA6}
     .unvisited-badge{font-size:9px;padding:3px 8px;border-radius:8px;font-weight:500;background:var(--bg);color:var(--muted);border:1px solid var(--border)}
     .mem-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
@@ -164,7 +172,39 @@
     .mem-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));color:#fff;font-size:10px;padding:10px 7px 7px}
     .mem-add{color:var(--muted);font-size:24px}
     .mem-add-label{font-size:10px;color:var(--muted);margin-top:3px}
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+    /* TRAVEL MAP */
+    .travel-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+    .tstat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center}
+    .tstat-n{font-size:20px;font-weight:500;color:var(--text)}
+    .tstat-l{font-size:9px;color:var(--muted);margin-top:2px;display:flex;align-items:center;justify-content:center;gap:3px}
+    .tdot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+    .who-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .who-lbl{font-size:12px;color:var(--muted)}
+    .who-pill{padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--muted);-webkit-tap-highlight-color:transparent}
+    .who-pill.anna-on{background:#C2607A;color:#fff;border-color:#C2607A}
+    .who-pill.utku-on{background:#2A9D8F;color:#fff;border-color:#2A9D8F}
+
+    .tlegend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:var(--muted)}
+    .tli{display:flex;align-items:center;gap:4px}
+    .tld{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+    .t-open-btn{width:100%;padding:11px;border-radius:12px;background:var(--accent);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;-webkit-tap-highlight-color:transparent}
+    .t-wish-btn{width:100%;padding:9px;border-radius:12px;background:var(--surface);color:var(--muted);border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+    /* TRAVEL MODAL */
+    .tmodal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:flex-end;justify-content:center}
+    .tmodal-bg.open{display:flex}
+    .tmodal{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:82vh;display:flex;flex-direction:column}
+    .tmodal-head{padding:16px 16px 10px;display:flex;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0}
+    .tmodal-title{font-size:15px;font-weight:500;color:var(--text);flex:1}
+    .tmodal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);padding:0 4px}
+    .tmodal-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto}
+    .tmodal-tab{padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);white-space:nowrap;border:none;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;background:none}
+    .tmodal-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+    .tmodal-body{overflow-y:auto;padding:12px 14px 24px;flex:1;-webkit-overflow-scrolling:touch}
+    .cg{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+    .ci{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:12px;color:var(--text);background:var(--bg);-webkit-tap-highlight-color:transparent}
+    .ci .cm{width:10px;height:10px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--border)}
+    /* modal & countdown modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
     .modal-overlay.open{display:flex}
     .modal{background:var(--surface);border-radius:var(--r);padding:20px;width:100%;max-width:320px}
     .modal-title{font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:14px;color:var(--text)}
@@ -176,6 +216,8 @@
     .app.apart .badge-seen,.app.apart .visited-badge{background:#1E4040;color:#7ECFC8}
     .app.apart .dot-btn.lit{background:var(--apt-accent);border-color:var(--apt-accent)}
     .app.apart .w-avg-pill,.app.apart .rest-avg-pill{background:var(--apt-accent)}
+  .leaflet-tooltip-custom{background:rgba(20,10,40,.88)!important;color:#fff!important;border:none!important;border-radius:8px!important;font-size:12px!important;font-family:'DM Sans',sans-serif!important;padding:4px 10px!important;box-shadow:none!important}
+  .leaflet-tooltip-custom::before{display:none!important}
   </style>
 </head>
 <body>
@@ -190,7 +232,13 @@
     </div>
   </div>
   <div class="countdown-bar" id="countdown" onclick="openCountdownModal()">✈️ Tap to set your next meeting</div>
+  <div class="notif-banner" id="notif-banner">
+    <span style="flex:1">Enable notifications to receive hugs 💜</span>
+    <button onclick="requestNotifPermission()">Enable</button>
+    <button onclick="document.getElementById('notif-banner').classList.remove('visible')" style="background:rgba(255,255,255,.1)">✕</button>
+  </div>
 
+  <!-- HOME -->
   <div class="screen active" id="s-home">
     <div class="sec-title" id="greeting">Good morning, you two</div>
     <div class="sec-sub" id="greeting-sub">So glad you're together.</div>
@@ -204,13 +252,14 @@
         <div class="quick-item" onclick="goTo('s-ent');setNav('nav-ent')"><svg class="qi-svg" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><div class="qi-label">Entertainment</div></div>
         <div class="quick-item" onclick="goTo('s-connect');setNav('nav-connect')"><svg class="qi-svg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><div class="qi-label">Connect</div></div>
         <div class="quick-item" onclick="goTo('s-house');setNav('nav-house')"><svg class="qi-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="qi-label">Housekeeping</div></div>
+        <div class="quick-item" onclick="goTo('s-travel');setNav('nav-travel')"><svg class="qi-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg><div class="qi-label">Travel</div></div>
         <div class="quick-item" onclick="goTo('s-memory');setNav('nav-mem')"><svg class="qi-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><div class="qi-label">Memories</div></div>
-        <div class="quick-item"><svg class="qi-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg><div class="qi-label">Travel</div></div>
         <div class="quick-item"><svg class="qi-svg" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><div class="qi-label">Language</div></div>
       </div>
     </div>
   </div>
 
+  <!-- ENTERTAINMENT -->
   <div class="screen" id="s-ent">
     <div class="sec-title">Entertainment</div>
     <div class="sec-sub">What you've watched, read & heard.</div>
@@ -262,28 +311,56 @@
     </div>
   </div>
 
+  <!-- CONNECT -->
   <div class="screen" id="s-connect">
-    <div class="sec-title">Hey you 💕</div>
-    <div class="sec-sub">Send something sweet.</div>
-    <div class="hug-grid">
-      <div class="hug-btn" onclick="sendHug('🤗','Hug')"><span class="hb-icon">🤗</span><span class="hb-label">Hug</span></div>
-      <div class="hug-btn" onclick="sendHug('😘','Kiss')"><span class="hb-icon">😘</span><span class="hb-label">Kiss</span></div>
-      <div class="hug-btn" onclick="sendHug('❤️‍🔥','Fire')"><span class="hb-icon">❤️‍🔥</span><span class="hb-label">Fire</span></div>
-      <div class="hug-btn" onclick="sendHug('🌙','Night')"><span class="hb-icon">🌙</span><span class="hb-label">Night</span></div>
-      <div class="hug-btn" onclick="sendHug('☕','Morning')"><span class="hb-icon">☕</span><span class="hb-label">Morning</span></div>
-      <div class="hug-btn" onclick="sendHug('🌹','Roses')"><span class="hb-icon">🌹</span><span class="hb-label">Roses</span></div>
-      <div class="hug-btn" onclick="sendHug('✨','Magic')"><span class="hb-icon">✨</span><span class="hb-label">Magic</span></div>
-      <div class="hug-btn" onclick="sendHug('💜','Love')"><span class="hb-icon">💜</span><span class="hb-label">Love</span></div>
+    <div class="connect-intro">Hey you 💕</div>
+    <div class="connect-sub">Send something sweet — they'll feel it.</div>
+    <div class="received-area" id="received-area"><span style="font-size:13px;color:var(--muted)">Waiting for something sweet...</span></div>
+    <div class="send-grid">
+      <div class="send-btn" id="btn-hug" onclick="sendHug('🤗','sent you a hug','Hug')"><span class="send-icon">🤗</span><span class="send-label">Hug</span></div>
+      <div class="send-btn" id="btn-kiss" onclick="sendHug('😘','sent you a kiss','Kiss')"><span class="send-icon">😘</span><span class="send-label">Kiss</span></div>
+      <div class="send-btn" id="btn-ilu" onclick="sendHug('❤️','loves you','I love you')"><span class="send-icon">❤️</span><span class="send-label">I love you</span></div>
+      <div class="send-btn" id="btn-night" onclick="sendHug('🌙','says good night','Good night')"><span class="send-icon">🌙</span><span class="send-label">Good night</span></div>
+      <div class="send-btn" id="btn-coffee" onclick="sendHug('☕','is thinking of you','Coffee?')"><span class="send-icon">☕</span><span class="send-label">Coffee?</span></div>
+      <div class="send-btn" id="btn-call" onclick="sendHug('📞','wants to call you','Call me?')"><span class="send-icon">📞</span><span class="send-label">Call me?</span></div>
     </div>
-    <div class="popup-area" id="popup-area"><span style="font-size:12px;color:var(--muted)">Your emoji appears here</span></div>
-    <div class="daily-q">
-      <div class="dq-label">Daily Question</div>
-      <div class="dq-question" id="dq-q">"What's the most beautiful thing that happened to you today?"</div>
-      <textarea class="dq-input" id="dq-answer" placeholder="Your answer..."></textarea>
-      <button class="btn" style="margin-top:8px;width:100%" onclick="submitDQ()">Send answer 💌</button>
+    <div class="last-sent" id="last-sent" style="display:none">
+      <span class="last-sent-label">You sent</span>
+      <span id="last-sent-emoji" style="font-size:20px"></span>
+      <span id="last-sent-time" style="font-size:10px;color:var(--muted);opacity:.6"></span>
     </div>
   </div>
 
+  <!-- TRAVEL -->
+  <div class="screen" id="s-travel">
+    <div class="sec-title">Travel Map</div>
+    <div class="sec-sub">Your world together.</div>
+    <div class="travel-stats">
+      <div class="tstat"><div class="tstat-n" id="tc">0</div><div class="tstat-l"><span class="tdot" style="background:#7B5EA7"></span>Together</div></div>
+      <div class="tstat"><div class="tstat-n" id="tca">0</div><div class="tstat-l"><span class="tdot" style="background:#C2607A"></span>Anna</div></div>
+      <div class="tstat"><div class="tstat-n" id="tcu">0</div><div class="tstat-l"><span class="tdot" style="background:#2A9D8F"></span>Utku</div></div>
+      <div class="tstat"><div class="tstat-n" id="tcw">0</div><div class="tstat-l"><span class="tdot" style="background:#D4A017"></span>Wishlist</div></div>
+    </div>
+    <div class="who-row">
+      <span class="who-lbl">I am:</span>
+      <button class="who-pill anna-on" id="wpill-anna" onclick="setTravelMe('anna')">Anna</button>
+      <button class="who-pill" id="wpill-utku" onclick="setTravelMe('utku')">Utku</button>
+    </div>
+    <div class="tlegend">
+      <div class="tli"><div class="tld" style="background:#7B5EA7"></div>Together</div>
+      <div class="tli"><div class="tld" style="background:#C2607A"></div>Anna</div>
+      <div class="tli"><div class="tld" style="background:#2A9D8F"></div>Utku</div>
+      <div class="tli"><div class="tld" style="background:#D4A017"></div>Wishlist</div>
+    </div>
+    <div id="mapcon" style="border-radius:14px;border:1px solid var(--border);overflow:hidden;background:#B8D4E8;position:relative;margin-bottom:10px">
+      <svg id="tmap" viewBox="0 0 1009 666" style="display:block;width:100%;cursor:grab" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="map-tip" style="position:absolute;background:rgba(20,10,40,.9);color:#fff;padding:4px 10px;border-radius:8px;font-size:11px;pointer-events:none;display:none;white-space:nowrap;z-index:20;font-family:'DM Sans',sans-serif"></div>
+    </div>
+    <button class="t-open-btn" onclick="openTModal('visited')">+ Add visited countries</button>
+    <button class="t-wish-btn" onclick="openTModal('wishlist')">★ Add to wishlist</button>
+  </div>
+
+  <!-- HOUSEKEEPING -->
   <div class="screen" id="s-house">
     <div class="sec-title">Housekeeping</div>
     <div class="sec-sub">What do you need?</div>
@@ -291,6 +368,7 @@
     <div class="shopping-list" id="shop-list"></div>
   </div>
 
+  <!-- MEMORY -->
   <div class="screen" id="s-memory">
     <div class="sec-title">Memory Wall</div>
     <div class="sec-sub">Your most beautiful moments.</div>
@@ -304,10 +382,11 @@
 
   <div class="nav">
     <div class="nav-item active" id="nav-home" onclick="goTo('s-home');setNav('nav-home')"><svg class="nav-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="nav-label">Home</span></div>
-    <div class="nav-item" id="nav-ent" onclick="goTo('s-ent');setNav('nav-ent')"><svg class="nav-svg" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span class="nav-label">Entertain</span></div>
+    <div class="nav-item" id="nav-ent" onclick="goTo('s-ent');setNav('nav-ent')"><svg class="nav-svg" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><span class="nav-label">Watch</span></div>
     <div class="nav-item" id="nav-connect" onclick="goTo('s-connect');setNav('nav-connect')"><svg class="nav-svg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span class="nav-label">Connect</span></div>
+    <div class="nav-item" id="nav-travel" onclick="goTo('s-travel');setNav('nav-travel')"><svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg><span class="nav-label">Travel</span></div>
     <div class="nav-item" id="nav-house" onclick="goTo('s-house');setNav('nav-house')"><svg class="nav-svg" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="nav-label">House</span></div>
-    <div class="nav-item" id="nav-mem" onclick="goTo('s-memory');setNav('nav-mem')"><svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span class="nav-label">Memories</span></div>
+    <div class="nav-item" id="nav-mem" onclick="goTo('s-memory');setNav('nav-mem')" ><svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span class="nav-label">Memories</span></div>
   </div>
 </div>
 
@@ -324,214 +403,243 @@
   </div>
 </div>
 
+<!-- TRAVEL MODAL -->
+<div class="tmodal-bg" id="tmodal-bg">
+  <div class="tmodal">
+    <div class="tmodal-head">
+      <div class="tmodal-title" id="tmodal-title">Countries</div>
+      <button class="tmodal-close" onclick="closeTModal()">×</button>
+    </div>
+    <div class="tmodal-tabs" id="tmodal-tabs"></div>
+    <div class="tmodal-body" id="tmodal-body"></div>
+  </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
-  const app = initializeApp({
-    apiKey:"AIzaSyBDYR4vrVu97IJIJrDom_6mEZiFibn6eys",
-    authDomain:"cuteyhub.firebaseapp.com",
-    databaseURL:"https://cuteyhub-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId:"cuteyhub",
-    storageBucket:"cuteyhub.firebasestorage.app",
-    messagingSenderId:"631463559935",
-    appId:"1:631463559935:web:37091bc36906f66d55c2ca"
-  });
-  const db = getDatabase(app);
+  const fbConfig={apiKey:"AIzaSyBDYR4vrVu97IJIJrDom_6mEZiFibn6eys",authDomain:"cuteyhub.firebaseapp.com",databaseURL:"https://cuteyhub-default-rtdb.europe-west1.firebasedatabase.app",projectId:"cuteyhub",storageBucket:"cuteyhub.firebasestorage.app",messagingSenderId:"631463559935",appId:"1:631463559935:web:37091bc36906f66d55c2ca"};
+  const VAPID="BDS391CEswPljypo3oObUdVIJ5M5zVeEPxwGYUI4LpJsJ32yBrLKfwhCXTJ0JEsmGGcm__9YLy-JqYDo39JmsUw";
+  const fbApp=initializeApp(fbConfig);
+  const db=getDatabase(fbApp);
+  let messaging=null;
 
-  const syncDot = document.getElementById('sync-dot');
-  const sync = () => syncDot.className='sync-dot syncing';
-  const synced = () => syncDot.className='sync-dot synced';
-
-  const typeColors={Film:'#7B5EA7',Series:'#2A9D8F',Play:'#C2607A',Concert:'#D4854A',Other:'#888'};
-  let selType='Film', selStatus='seen', selRestCat='ffood', isApart=false;
-  let watchedData={}, shopData={}, bookData={}, restData={ffood:{},fcoffee:{},wfood:{},wcoffee:{}};
-  const openStates={};
-
-  function avgStr(a,b){const v=[a,b].filter(x=>x>0);return v.length?(v.reduce((s,x)=>s+x,0)/v.length).toFixed(1):'—'}
-
-  function scoreDotsHTML(score, dbPath, field){
-    return Array.from({length:10},(_,i)=>`<div class="dot-btn ${i<score?'lit':''}" onclick="window._rate('${dbPath}','${field}',${i+1})">${i+1}</div>`).join('');
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js').then(reg=>{
+      try{
+        messaging=getMessaging(fbApp);
+        if(Notification.permission==='default') document.getElementById('notif-banner').classList.add('visible');
+        else if(Notification.permission==='granted') setupFCMToken();
+        onMessage(messaging,payload=>{showReceived(payload.notification?.title?.split(' ')[0]||'💜',payload.notification?.body||'');});
+      }catch(e){}
+    });
+  }
+  window.requestNotifPermission=async()=>{
+    const p=await Notification.requestPermission();
+    document.getElementById('notif-banner').classList.remove('visible');
+    if(p==='granted') setupFCMToken();
+  };
+  async function setupFCMToken(){
+    if(!messaging)return;
+    try{const t=await getToken(messaging,{vapidKey:VAPID});if(t){const k=localStorage.getItem('cuteyhub_device')||'anna';localStorage.setItem('cuteyhub_device',k);set(ref(db,`fcmTokens/${k}`),t);}}catch(e){}
   }
 
-  window._rate = (path, field, val) => { sync(); update(ref(db, path),{[field]:val}).then(synced); };
-  window._toggleOpen = (id) => { openStates[id]=!openStates[id]; renderWatched(); renderRest(); };
+  const syncDot=document.getElementById('sync-dot');
+  const sync=()=>syncDot.className='sync-dot syncing';
+  const synced=()=>syncDot.className='sync-dot synced';
 
-  // MODE
-  window.switchMode = () => {
-    isApart=!isApart; applyMode();
-    sync(); set(ref(db,'settings/mode'),isApart?'apart':'together').then(synced);
+  const TC={together:'#7B5EA7',anna:'#C2607A',utku:'#2A9D8F',wish:'#D4A017',none:'#B8D4E8',border:'#8ABBD4'};
+  let travelMe='anna', tModalMode='visited', tContinent='Europe';
+  let tVisited={}, tWishlist={};
+
+  const CONTINENTS={
+    'Europe':['Albania','Austria','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Ireland','Italy','Kosovo','Latvia','Lithuania','Luxembourg','Moldova','Netherlands','Norway','Poland','Portugal','Romania','Russia','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom'],
+    'Asia':['Afghanistan','Armenia','Azerbaijan','Bangladesh','Cambodia','China','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Kyrgyzstan','Laos','Lebanon','Malaysia','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Palestine','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Thailand','Turkey','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen'],
+    'Africa':['Algeria','Angola','Botswana','Cameroon','Egypt','Ethiopia','Ghana','Ivory Coast','Kenya','Libya','Morocco','Mozambique','Nigeria','Rwanda','Senegal','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Tunisia','Uganda','Zambia','Zimbabwe'],
+    'Americas':['Argentina','Bolivia','Brazil','Canada','Chile','Colombia','Costa Rica','Cuba','Dominican Republic','Ecuador','El Salvador','Guatemala','Honduras','Mexico','Nicaragua','Panama','Paraguay','Peru','United States','Uruguay','Venezuela'],
+    'Oceania':['Australia','Fiji','New Zealand','Papua New Guinea','Samoa'],
   };
-  onValue(ref(db,'settings/mode'), snap => {
-    const apart = (snap.val()||'together')==='apart';
-    if(apart!==isApart){isApart=apart;applyMode();}
-  });
-  function applyMode(){
-    const el=document.getElementById('app'), t=document.getElementById('toggle');
-    if(isApart){
-      el.classList.replace('together','apart');t.classList.add('apart-mode');
-      document.getElementById('countdown').classList.add('visible');
-      document.getElementById('greeting').textContent='Hey you, I miss you';
-      document.getElementById('greeting-sub').textContent='You\'ve got this.';
-      document.getElementById('aff-text').textContent='"Distance means nothing when you mean everything."';
-      document.getElementById('lbl-t').classList.remove('active');document.getElementById('lbl-a').classList.add('active');
+
+  // Country name lookup from ISO numeric ID
+  const ISO_NAMES={4:'Afghanistan',8:'Albania',12:'Algeria',24:'Angola',32:'Argentina',36:'Australia',40:'Austria',50:'Bangladesh',56:'Belgium',68:'Bolivia',76:'Brazil',100:'Bulgaria',104:'Myanmar',116:'Cambodia',120:'Cameroon',124:'Canada',152:'Chile',156:'China',170:'Colombia',178:'Congo',188:'Costa Rica',191:'Croatia',192:'Cuba',203:'Czech Republic',208:'Denmark',214:'Dominican Republic',218:'Ecuador',818:'Egypt',222:'El Salvador',231:'Ethiopia',246:'Finland',250:'France',276:'Germany',288:'Ghana',300:'Greece',320:'Guatemala',332:'Haiti',340:'Honduras',348:'Hungary',356:'India',360:'Indonesia',364:'Iran',368:'Iraq',372:'Ireland',376:'Israel',380:'Italy',388:'Jamaica',392:'Japan',400:'Jordan',398:'Kazakhstan',404:'Kenya',410:'South Korea',414:'Kuwait',418:'Laos',422:'Lebanon',434:'Libya',440:'Lithuania',442:'Luxembourg',458:'Malaysia',484:'Mexico',496:'Mongolia',504:'Morocco',508:'Mozambique',524:'Nepal',528:'Netherlands',554:'New Zealand',558:'Nicaragua',566:'Nigeria',578:'Norway',512:'Oman',586:'Pakistan',275:'Palestine',591:'Panama',600:'Paraguay',604:'Peru',608:'Philippines',616:'Poland',620:'Portugal',634:'Qatar',642:'Romania',643:'Russia',646:'Rwanda',682:'Saudi Arabia',686:'Senegal',694:'Sierra Leone',703:'Slovakia',705:'Slovenia',706:'Somalia',710:'South Africa',728:'South Sudan',724:'Spain',144:'Sri Lanka',729:'Sudan',752:'Sweden',756:'Switzerland',760:'Syria',762:'Tajikistan',764:'Thailand',780:'Trinidad and Tobago',788:'Tunisia',792:'Turkey',800:'Uganda',804:'Ukraine',784:'United Arab Emirates',826:'United Kingdom',840:'United States',858:'Uruguay',860:'Uzbekistan',862:'Venezuela',704:'Vietnam',887:'Yemen',894:'Zambia',716:'Zimbabwe',112:'Belarus',191:'Croatia',208:'Denmark',233:'Estonia',268:'Georgia',344:'Hong Kong',348:'Hungary',352:'Iceland',376:'Israel',428:'Latvia',440:'Lithuania',807:'North Macedonia',498:'Moldova',499:'Montenegro',408:'North Korea',688:'Serbia',703:'Slovakia',705:'Slovenia',414:'Kuwait',31:'Azerbaijan',51:'Armenia',364:'Iran',792:'Turkey'};
+
+  let tvb={x:0,y:0,w:1009,h:666};
+  let tdrag=false,tds={x:0,y:0},tvs={x:0,y:0};
+
+  function tColor(name){
+    const v=tVisited[name],w=tWishlist[name];
+    if(v){if(v.anna&&v.utku)return TC.together;if(v.anna)return TC.anna;if(v.utku)return TC.utku;}
+    if(w&&(w.anna||w.utku))return TC.wish;
+    return TC.none;
+  }
+
+  // ── TRAVEL MAP ────────────────────────────────────────────
+  const TC={together:'#7B5EA7',anna:'#C2607A',utku:'#2A9D8F',wish:'#D4A017',none:'#B8D4E8'};
+  let travelMe='anna', tModalMode='visited', tContinent='Europe';
+  let tVisited={}, tWishlist={};
+  const pathMap={};
+
+  const CONTINENTS={
+    'Europe':['Albania','Austria','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Ireland','Italy','Latvia','Lithuania','Luxembourg','Moldova','Netherlands','Norway','Poland','Portugal','Romania','Russia','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom'],
+    'Asia':['Afghanistan','Armenia','Azerbaijan','Bangladesh','Cambodia','China','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Laos','Lebanon','Malaysia','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Palestine','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Thailand','Turkey','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen'],
+    'Africa':['Algeria','Angola','Botswana','Cameroon','Egypt','Ethiopia','Ghana','Ivory Coast','Kenya','Libya','Morocco','Mozambique','Nigeria','Rwanda','Senegal','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Tunisia','Uganda','Zambia','Zimbabwe'],
+    'Americas':['Argentina','Bolivia','Brazil','Canada','Chile','Colombia','Costa Rica','Cuba','Dominican Republic','Ecuador','El Salvador','Guatemala','Honduras','Mexico','Nicaragua','Panama','Paraguay','Peru','United States','Uruguay','Venezuela'],
+    'Oceania':['Australia','Fiji','New Zealand','Papua New Guinea'],
+  };
+
+  function tColor(name){
+    const v=tVisited[name],w=tWishlist[name];
+    if(v){if(v.anna&&v.utku)return TC.together;if(v.anna)return TC.anna;if(v.utku)return TC.utku;}
+    if(w&&(w.anna||w.utku))return TC.wish;
+    return TC.none;
+  }
+
+  function refreshTMap(){
+    Object.entries(pathMap).forEach(([n,el])=>el.setAttribute('fill',tColor(n)));
+    updateTStats();
+  }
+
+  function updateTStats(){
+    let t=0,a=0,u=0,w=0;
+    Object.values(tVisited).forEach(v=>{if(v.anna&&v.utku)t++;else if(v.anna)a++;else if(v.utku)u++;});
+    Object.values(tWishlist).forEach(v=>{if(v.anna||v.utku)w++;});
+    document.getElementById('tc').textContent=t;
+    document.getElementById('tca').textContent=a;
+    document.getElementById('tcu').textContent=u;
+    document.getElementById('tcw').textContent=w;
+  }
+
+  window.tToggle = function(name){
+    if(tModalMode==='wishlist'){
+      if(!tWishlist[name])tWishlist[name]={anna:false,utku:false};
+      tWishlist[name][travelMe]=!tWishlist[name][travelMe];
+      if(!tWishlist[name].anna&&!tWishlist[name].utku)delete tWishlist[name];
+      sync();set(ref(db,'travel/wishlist'),tWishlist).then(synced);
     } else {
-      el.classList.replace('apart','together');t.classList.remove('apart-mode');
-      document.getElementById('countdown').classList.remove('visible');
-      document.getElementById('greeting').textContent='Good morning, you two';
-      document.getElementById('greeting-sub').textContent='So glad you\'re together.';
-      document.getElementById('aff-text').textContent='"Every day I choose you again."';
-      document.getElementById('lbl-t').classList.add('active');document.getElementById('lbl-a').classList.remove('active');
+      if(!tVisited[name])tVisited[name]={anna:false,utku:false};
+      tVisited[name][travelMe]=!tVisited[name][travelMe];
+      if(!tVisited[name].anna&&!tVisited[name].utku)delete tVisited[name];
+      sync();set(ref(db,'travel/visited'),tVisited).then(synced);
+    }
+    refreshTMap();
+    if(document.getElementById('tmodal-bg').classList.contains('open'))renderTModalBody();
+  };
+
+  window.setTravelMe = who=>{
+    travelMe=who;
+    document.getElementById('wpill-anna').className='who-pill'+(who==='anna'?' anna-on':'');
+    document.getElementById('wpill-utku').className='who-pill'+(who==='utku'?' utku-on':'');
+  };
+
+  window.openTModal = mode=>{
+    tModalMode=mode;
+    document.getElementById('tmodal-title').textContent=mode==='visited'?'Countries I have visited':'My wishlist';
+    document.getElementById('tmodal-bg').classList.add('open');
+    renderTModalTabs();renderTModalBody();
+  };
+  window.closeTModal = ()=>document.getElementById('tmodal-bg').classList.remove('open');
+  window.setTContinent = c=>{tContinent=c;renderTModalTabs();renderTModalBody();};
+
+  function renderTModalTabs(){
+    document.getElementById('tmodal-tabs').innerHTML=Object.keys(CONTINENTS).map(c=>`
+      <button class="tmodal-tab ${c===tContinent?'on':''}" onclick="setTContinent('${c}')">${c}</button>`).join('');
+  }
+
+  function renderTModalBody(){
+    const list=CONTINENTS[tContinent];
+    document.getElementById('tmodal-body').innerHTML=`<div class="cg">${list.map(name=>{
+      const v=tVisited[name]||{},w=tWishlist[name]||{};
+      const mine=tModalMode==='visited'?!!v[travelMe]:!!w[travelMe];
+      const col=mine?(tModalMode==='visited'?(travelMe==='anna'?TC.anna:TC.utku):TC.wish):'transparent';
+      const bg=mine?(travelMe==='anna'?'#FBEAF0':travelMe==='utku'?'#E1F5EE':'#FEF3C7'):'var(--bg)';
+      const partner=tModalMode==='visited'&&((travelMe==='anna'&&v.utku)||(travelMe==='utku'&&v.anna));
+      return `<div class="ci" onclick="tToggle('${name}')" style="background:${bg};border-color:${mine?col:'var(--border)'}">
+        <span class="cm" style="background:${col};border-color:${mine?col:'var(--border)'}"></span>
+        <span style="flex:1">${name}</span>
+        ${partner?`<span style="font-size:10px;color:#7B5EA7">♡</span>`:''}
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  document.getElementById('tmodal-bg').addEventListener('click',e=>{
+    if(e.target===document.getElementById('tmodal-bg'))closeTModal();
+  });
+
+  // Firebase travel sync
+  onValue(ref(db,'travel/visited'),snap=>{tVisited=snap.val()||{};refreshTMap();if(document.getElementById('tmodal-bg').classList.contains('open'))renderTModalBody();});
+  onValue(ref(db,'travel/wishlist'),snap=>{tWishlist=snap.val()||{};refreshTMap();if(document.getElementById('tmodal-bg').classList.contains('open'))renderTModalBody();});
+
+  // Map: try to load real map, fallback to simple placeholder
+  async function initTMap(){
+    const mapcon=document.getElementById('mapcon');
+    try {
+      const [world,topo] = await Promise.all([
+        fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r=>{if(!r.ok)throw new Error();return r.json();}),
+        new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';s.onload=()=>res(window.topojson);s.onerror=rej;document.head.appendChild(s);})
+      ]);
+      const features=topo.feature(world,world.objects.countries).features;
+      const svg=document.getElementById('tmap');
+      svg.innerHTML='';
+      // Natural Earth projection approximation
+      const W=1009,H=666;
+      function proj(lon,lat){
+        const x=(lon+180)/360*W;
+        const y=(90-lat)/180*H;
+        return [x,y];
+      }
+      function geoPath(geo){
+        let d='';
+        const polys=geo.type==='Polygon'?[geo.coordinates]:geo.coordinates;
+        for(const poly of polys){
+          for(const ring of poly){
+            ring.forEach(([lon,lat],i)=>{
+              const [px,py]=proj(lon,lat);
+              d+=i===0?`M${px.toFixed(1)},${py.toFixed(1)}`:`L${px.toFixed(1)},${py.toFixed(1)}`;
+            });
+            d+='Z';
+          }
+        }
+        return d;
+      }
+      features.forEach(f=>{
+        const name=f.properties.name;
+        const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+        p.setAttribute('d',geoPath(f.geometry));
+        p.setAttribute('fill',tColor(name));
+        p.setAttribute('stroke','#8ABBD4');
+        p.setAttribute('stroke-width','0.4');
+        p.style.cursor='pointer';
+        p.style.transition='fill .25s';
+        const tip=document.getElementById('map-tip');
+        const mc=document.getElementById('mapcon');
+        p.addEventListener('mouseenter',e=>{
+          tip.style.display='block';
+          const v=tVisited[name],w=tWishlist[name];
+          let s='';
+          if(v){if(v.anna&&v.utku)s=' — Together';else if(v.anna)s=' — Anna';else if(v.utku)s=' — Utku';}
+          else if(w&&(w.anna||w.utku))s=' — Wishlist';
+          tip.textContent=name+s;
+        });
+        p.addEventListener('mousemove',e=>{const r=mc.getBoundingClientRect();tip.style.left=(e.clientX-r.left+10)+'px';tip.style.top=(e.clientY-r.top-28)+'px';});
+        p.addEventListener('mouseleave',()=>tip.style.display='none');
+        p.addEventListener('click',()=>{tModalMode='visited';tToggle(name);});
+        pathMap[name]=p;
+        svg.appendChild(p);
+      });
+      // Pan/zoom
+      let vb={x:0,y:0,w:W,h:H},drag=false,ds={x:0,y:0},vs={};
+      svg.addEventListener('mousedown',e=>{drag=true;ds={x:e.clientX,y:e.clientY};vs={...vb};});
+      window.addEventListener('mousemove',e=>{if(!drag)return;const r=mc.getBoundingClientRect();vb.x=Math.max(-100,Math.min(W,vs.x-(e.clientX-ds.x)*(vb.w/r.width)));vb.y=Math.max(-50,Math.min(H,vs.y-(e.clientY-ds.y)*(vb.h/r.height)));svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);});
+      window.addEventListener('mouseup',()=>drag=false);
+      svg.addEventListener('wheel',e=>{e.preventDefault();const f=e.deltaY>0?1.12:.9;const r=mc.getBoundingClientRect();const mx=(e.clientX-r.left)/r.width*vb.w+vb.x,my=(e.clientY-r.top)/r.height*vb.h+vb.y;vb.w=Math.min(W,Math.max(150,vb.w*f));vb.h=Math.min(H,Math.max(75,vb.h*f));vb.x=Math.max(-100,Math.min(W-vb.w,mx-vb.w/2));vb.y=Math.max(-50,Math.min(H-vb.h,my-vb.h/2));svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);},{passive:false});
+    } catch(e){
+      // Fallback: show nice placeholder
+      document.getElementById('mapcon').innerHTML='<div id="map-fallback" style="display:flex;align-items:center;justify-content:center;height:200px;background:var(--surface);border-radius:14px;border:1px solid var(--border);color:var(--muted);font-size:13px;flex-direction:column;gap:8px"><div style="font-size:28px">🗺️</div><div>Tap below to add your countries</div></div>';
     }
   }
-
-  // COUNTDOWN
-  onValue(ref(db,'settings/countdown'), snap => {
-    const d=snap.val(); if(!d)return;
-    const days=Math.ceil((new Date(d.date)-new Date())/(86400000));
-    const bar=document.getElementById('countdown');
-    if(days>0) bar.textContent=`✈️  ${days} day${days!==1?'s':''} until you meet · ${d.city}  —  tap to edit`;
-    else if(days===0) bar.textContent=`🎉 Today's the day! ${d.city}  —  tap to edit`;
-    else bar.textContent=`💜 You were in ${d.city}  —  tap to update`;
-  });
-  window.openCountdownModal = () => document.getElementById('countdown-modal').classList.add('open');
-  window.closeCountdownModal = () => document.getElementById('countdown-modal').classList.remove('open');
-  window.saveCountdown = () => {
-    const date=document.getElementById('meet-date').value;
-    const city=document.getElementById('meet-city').value.trim()||'next stop';
-    if(!date)return; sync();
-    set(ref(db,'settings/countdown'),{date,city}).then(()=>{synced();closeCountdownModal()});
-  };
-
-  // SHOPPING
-  onValue(ref(db,'shopping'), snap => { shopData=snap.val()||{}; renderShop(); });
-  function renderShop(){
-    document.getElementById('shop-list').innerHTML=Object.entries(shopData).sort((a,b)=>a[1].ts-b[1].ts).map(([k,i])=>`
-      <div class="shop-item ${i.done?'done':''}" onclick="window._toggleShop('${k}')">
-        <div class="check-circle"></div><span class="shop-name">${i.text}</span>
-        <span class="shop-del" onclick="event.stopPropagation();window._delShop('${k}')">×</span>
-      </div>`).join('');
-  }
-  window.addItem = () => {
-    const inp=document.getElementById('shop-input'), val=inp.value.trim(); if(!val)return;
-    sync(); push(ref(db,'shopping'),{text:val,done:false,ts:Date.now()}).then(synced); inp.value='';
-  };
-  window._toggleShop = k => { sync(); update(ref(db,`shopping/${k}`),{done:!shopData[k].done}).then(synced); };
-  window._delShop = k => { sync(); remove(ref(db,`shopping/${k}`)).then(synced); };
-
-  // WATCHED
-  onValue(ref(db,'watched'), snap => { watchedData=snap.val()||{}; renderWatched(); });
-  function renderWatched(){
-    document.getElementById('watched-list').innerHTML=Object.entries(watchedData).sort((a,b)=>b[1].ts-a[1].ts).map(([k,w])=>{
-      const avg=avgStr(w.annaR||0,w.utkuR||0); const open=openStates['w_'+k];
-      return `<div class="w-item">
-        <div class="w-top" onclick="window._toggleOpen('w_${k}')">
-          <div class="w-type-dot" style="background:${typeColors[w.type]||'#888'}"></div>
-          <div class="w-info"><div class="w-title">${w.title}</div><div class="w-meta">${w.type}</div></div>
-          ${w.status==='seen'?`<div class="w-avg-pill">${avg==='—'?'Rate ▾':avg+' ▾'}</div>`:`<span class="w-badge badge-want">Watchlist</span>`}
-        </div>
-        ${w.status==='seen'?`<div class="ratings-block ${open?'open':''}">
-          <div class="rater-row"><div class="rater-name">Anna</div><div class="score-dots">${scoreDotsHTML(w.annaR||0,`watched/${k}`,'annaR')}</div><div class="score-val">${w.annaR||'—'}</div></div>
-          <div class="rater-row"><div class="rater-name">Utku</div><div class="score-dots">${scoreDotsHTML(w.utkuR||0,`watched/${k}`,'utkuR')}</div><div class="score-val">${w.utkuR||'—'}</div></div>
-          <div class="avg-row"><div class="avg-label">Avg</div><div class="avg-val">${avg}</div><div class="avg-sub">/ 10</div></div>
-        </div>`:''}
-      </div>`;
-    }).join('');
-  }
-  window.addWatched = () => {
-    const inp=document.getElementById('watched-input'), val=inp.value.trim(); if(!val)return;
-    sync(); push(ref(db,'watched'),{title:val,type:selType,status:selStatus,annaR:0,utkuR:0,ts:Date.now()}).then(synced); inp.value='';
-  };
-
-  // BOOKS
-  onValue(ref(db,'books'), snap => { bookData=snap.val()||{}; renderBooks(); });
-  function renderBooks(){
-    document.getElementById('book-list').innerHTML=Object.entries(bookData).sort((a,b)=>b[1].ts-a[1].ts).map(([k,b])=>`
-      <div class="book-item">
-        <div class="book-spine" style="background:${b.color}"></div>
-        <div class="book-info"><div class="book-title">${b.title}</div><div class="book-meta">${b.author||''}</div></div>
-        <span class="w-badge ${b.status==='done'?'badge-seen':'badge-want'}">${b.status==='done'?'Done':'Reading'}</span>
-      </div>`).join('');
-  }
-  window.addBook = status => {
-    const inp=document.getElementById('book-input'), val=inp.value.trim(); if(!val)return;
-    const cols=['#7B5EA7','#C2607A','#4A6FA5','#2E9E6B','#D4854A'];
-    sync(); push(ref(db,'books'),{title:val,author:'',status,color:cols[Math.floor(Math.random()*cols.length)],ts:Date.now()}).then(synced); inp.value='';
-  };
-
-  // RESTAURANTS
-  onValue(ref(db,'restaurants'), snap => { restData=Object.assign({ffood:{},fcoffee:{},wfood:{},wcoffee:{}},snap.val()||{}); renderRest(); });
-  function renderRest(){
-    const items=Object.entries(restData[selRestCat]||{}).sort((a,b)=>b[1].ts-a[1].ts);
-    document.getElementById('rest-list').innerHTML=items.map(([k,r])=>{
-      const avg=avgStr(r.annaR||0,r.utkuR||0); const open=openStates['r_'+k];
-      return `<div class="rest-item">
-        <div class="rest-top" onclick="window._toggleOpen('r_${k}')">
-          <div class="rest-info">
-            <div class="rest-name">${r.name}</div>
-            <div class="rest-meta">${r.meta||''}</div>
-            ${r.gmaps?`<div class="rest-gmaps"><span class="gmaps-star">★</span><span class="gmaps-score">${r.gmaps}</span><span class="gmaps-label">Google Maps</span></div>`:''}
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
-            ${r.visited?`<span class="visited-badge">Visited</span>`:`<span class="unvisited-badge">Want to go</span>`}
-            ${r.visited?`<div class="rest-avg-pill">${avg==='—'?'Rate ▾':avg+' ▾'}</div>`:''}
-          </div>
-        </div>
-        ${r.visited?`<div class="ratings-block ${open?'open':''}">
-          <div class="rater-row"><div class="rater-name">Anna</div><div class="score-dots">${scoreDotsHTML(r.annaR||0,`restaurants/${selRestCat}/${k}`,'annaR')}</div><div class="score-val">${r.annaR||'—'}</div></div>
-          <div class="rater-row"><div class="rater-name">Utku</div><div class="score-dots">${scoreDotsHTML(r.utkuR||0,`restaurants/${selRestCat}/${k}`,'utkuR')}</div><div class="score-val">${r.utkuR||'—'}</div></div>
-          <div class="avg-row"><div class="avg-label">Avg</div><div class="avg-val">${avg}</div><div class="avg-sub">/ 10</div></div>
-        </div>`:''}
-      </div>`;
-    }).join('');
-  }
-  window.addRest = () => {
-    const name=document.getElementById('rest-input').value.trim(); if(!name)return;
-    const gm=parseFloat(document.getElementById('rest-gmaps-input').value)||null;
-    sync(); push(ref(db,`restaurants/${selRestCat}`),{name,meta:'',gmaps:gm,visited:false,annaR:0,utkuR:0,ts:Date.now()}).then(synced);
-    document.getElementById('rest-input').value=''; document.getElementById('rest-gmaps-input').value='';
-  };
-
-  // CONNECT
-  const dqQ=["What's the most beautiful thing that happened to you today?","If you were here right now, what would we do?","What do you love most about us?","What made you smile today?","Which shared memory do you miss the most right now?"];
-  let dqIdx=0;
-  let lastHugTs=0;
-  onValue(ref(db,'connect/lastHug'), snap => {
-    const d=snap.val(); if(!d||d.ts<=lastHugTs)return;
-    lastHugTs=d.ts;
-    const area=document.getElementById('popup-area');
-    area.innerHTML=`<span class="popup-msg">${d.emoji}</span>`;
-    setTimeout(()=>{area.innerHTML=`<span style="font-size:12px;color:var(--muted)">${d.label} 💜</span>`},2000);
-  });
-  window.sendHug = (emoji, label) => { sync(); set(ref(db,'connect/lastHug'),{emoji,label,ts:Date.now()}).then(synced); };
-  window.submitDQ = () => {
-    const ans=document.getElementById('dq-answer').value.trim(); if(!ans)return;
-    dqIdx=(dqIdx+1)%dqQ.length;
-    document.getElementById('dq-q').textContent='"'+dqQ[dqIdx]+'"';
-    document.getElementById('dq-answer').value='';
-    sendHug('💌','Answer sent!');
-  };
-
-  // MEMORY (local)
-  window.addMemory = inp => {
-    const file=inp.files[0]; if(!file)return;
-    const reader=new FileReader();
-    reader.onload=e=>{
-      const grid=document.getElementById('mem-grid'), card=document.createElement('div');
-      card.className='mem-card'; card.innerHTML=`<img src="${e.target.result}"><div class="mem-label">Memory</div>`;
-      grid.insertBefore(card,grid.firstChild);
-    };
-    reader.readAsDataURL(file); inp.value='';
-  };
-
-  // UI
-  window.goTo = id => { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
-  window.setNav = id => { document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); document.getElementById(id).classList.add('active'); };
-  window.switchEnt = tab => ['watched','books','music','eat'].forEach(t=>{ document.getElementById('etab-'+t).classList.toggle('active',t===tab); document.getElementById('sec-'+t).classList.toggle('active',t===tab); });
-  window.selectType = el => { document.querySelectorAll('.type-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); selType=el.dataset.type; };
-  window.selectStatus = s => { selStatus=s; document.getElementById('sbtn-seen').classList.toggle('active',s==='seen'); document.getElementById('sbtn-want').classList.toggle('active',s==='want'); };
-  window.filterRest = el => { document.querySelectorAll('.rest-filter').forEach(f=>f.classList.remove('active')); el.classList.add('active'); selRestCat=el.dataset.cat; renderRest(); };
-  window.openLink = url => window.open(url,'_blank');
+  initTMap();
 </script>
 </body>
 </html>
