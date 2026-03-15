@@ -623,30 +623,36 @@ function renderTodos(){
   var items=Object.entries(HK_todoData).sort(function(a,b){return((order[a[1].prio]||0)-(order[b[1].prio]||0))||a[1].ts-b[1].ts;});
   var secs={urgent:[],soon:[],chill:[]};
   items.forEach(function(e){(secs[e[1].prio]||secs.chill).push(e);});
-  var labels={urgent:'🔴 Urgent',soon:'🟡 Soon',chill:'🟢 Chill'};
-  var html='';
-  ['urgent','soon','chill'].forEach(function(p){
+  var labels={urgent:"🔴 Urgent",soon:"🟡 Soon",chill:"🟢 Chill"};
+  var html="";
+  ["urgent","soon","chill"].forEach(function(p){
     var list=secs[p]; if(!list.length)return;
-    html+='<div class="tsec"><div class="tsec-title">'+labels[p]+'</div>';
+    html+="<div class=\"tsec\"><div class=\"tsec-title\">"+labels[p]+"</div>";
     list.forEach(function(e){
       var k=e[0],item=e[1];
-      var whoMap={anna:'<span class="ti-who who-anna">@Anna</span>',utku:'<span class="ti-who who-utku">@Utku</span>',both:'<span class="ti-who who-both">@Both</span>',''  :''};
+      var whoHtml="";
+      if(item.assignee==="anna") whoHtml="<span class=\"ti-who who-anna\">@Anna</span>";
+      else if(item.assignee==="utku") whoHtml="<span class=\"ti-who who-utku\">@Utku</span>";
+      else if(item.assignee==="both") whoHtml="<span class=\"ti-who who-both\">@Both</span>";
       var dt=fmtDeadline(item.deadline);
-      var dateHtml=dt?'<span class="ti-date'+(dt.overdue?' overdue':'')+'">📅 '+dt.label+'</span>':'';
-      var meta=(whoMap[item.assignee||'']||'')+dateHtml;
-      html+='<div class="ti'+(item.done?' done':'')+'" onclick="toggleTodo(''+k+'')">'
-        +'<div class="chk"></div>'
-        +'<div class="ti-body"><div class="tn">'+item.text+'</div>'
-        +(meta?'<div class="ti-meta">'+meta+'</div>':'')
-        +'</div>'
-        +'<span class="shd" onclick="event.stopPropagation();delTodo(''+k+'')">&#x2715;</span>'
-        +'</div>';
+      var dateHtml=dt?"<span class=\"ti-date"+(dt.overdue?" overdue":"")+"\">📅 "+dt.label+"</span>":"";
+      var meta=whoHtml+dateHtml;
+      html+="<div class=\"ti"+(item.done?" done":"")+"\""
+           +" onclick=\"toggleTodo(this)\" data-key=\""+k+"\">"
+           +"<div class=\"chk\"></div>"
+           +"<div class=\"ti-body\"><div class=\"tn\">"+item.text+"</div>"
+           +(meta?"<div class=\"ti-meta\">"+meta+"</div>":"")
+           +"</div>"
+           +"<span class=\"shd\" onclick=\"delTodoEl(this)\">x</span>"
+           +"</div>";
     });
-    html+='</div>';
+    html+="</div>";
   });
-  var el=document.getElementById('todo-list');
-  if(el) el.innerHTML=html||'<div class="empty">All done! &#x2713;</div>';
+  var el=document.getElementById("todo-list");
+  if(el) el.innerHTML=html||"<div class=\"empty\">All done!</div>";
 }
+function toggleTodo(el){var k=el.closest("[data-key]").dataset.key;if(W.doTogTodo)W.doTogTodo(k);}
+function delTodoEl(el){var k=el.closest("[data-key]").dataset.key;if(W.doDelTodo)W.doDelTodo(k);}
 
 
 var CONTS = {
@@ -666,13 +672,20 @@ function tColor(n) {
   return TC.none;
 }
 function renderTMTabs() {
-  document.getElementById('tmtabs').innerHTML = Object.keys(CONTS).map(c=>
-    '<button class="tmtab'+(c===tCont?' on':'')+'" onclick="setTCont(''+c+'')">'+c+'</button>'
-  ).join('');
+  var tabs = document.getElementById('tmtabs');
+  tabs.innerHTML = '';
+  Object.keys(CONTS).forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'tmtab' + (c===tCont?' on':'');
+    btn.textContent = c;
+    btn.onclick = function(){ setTCont(c); };
+    tabs.appendChild(btn);
+  });
 }
 function renderTMBody() {
   var list = CONTS[tCont];
-  var html = '<div class="cg">';
+  var grid = document.createElement('div');
+  grid.className = 'cg';
   list.forEach(function(name) {
     var v=tVisited[name]||{}, w=tWishlist[name]||{};
     var mine = tMode==='visited' ? !!v[tMe] : !!w[tMe];
@@ -680,14 +693,18 @@ function renderTMBody() {
     var bg = mine ? (tMe==='anna'?'#FBEAF0':tMe==='utku'?'#E1F5EE':'#FEF3C7') : 'var(--bg)';
     var bc = mine ? col : 'var(--bd)';
     var partner = tMode==='visited' && ((tMe==='anna'&&v.utku)||(tMe==='utku'&&v.anna));
-    html += '<div class="ci" onclick="tToggle(''+name+'')" style="background:'+bg+';border-color:'+bc+'">'
-      +'<span class="cm" style="background:'+col+';border-color:'+bc+'"></span>'
-      +'<span style="flex:1">'+name+'</span>'
-      +(partner?'<span style="font-size:10px;color:#7B5EA7">♡</span>':'')
-      +'</div>';
+    var div = document.createElement('div');
+    div.className = 'ci';
+    div.style.background = bg;
+    div.style.borderColor = bc;
+    div.innerHTML = '<span class="cm" style="background:'+col+';border-color:'+bc+'"></span>'
+      + '<span style="flex:1">'+name+'</span>'
+      + (partner ? '<span style="font-size:10px;color:#7B5EA7">♡</span>' : '');
+    div.onclick = function(){ tToggle(name); };
+    grid.appendChild(div);
   });
-  html += '</div>';
-  document.getElementById('tmb').innerHTML = html;
+  var body = document.getElementById('tmodal-body') || document.getElementById('tmb');
+  if(body){ body.innerHTML = ''; body.appendChild(grid); }
 }
 document.getElementById('tmbg').addEventListener('click', function(e){ if(e.target===this)closeTM(); });
 </script>
@@ -726,6 +743,13 @@ const sd=document.getElementById('sdot');
 const sync=()=>sd.className='sdot busy';
 const synced=()=>sd.className='sdot ok';
 
+// Event delegation for rating dots
+document.addEventListener('click', e=>{
+  if(e.target.classList.contains('db')){
+    const el=e.target, path=el.dataset.path, fld=el.dataset.fld, val=parseInt(el.dataset.val);
+    if(path&&fld&&val){ sync(); update(ref(db,path),{[fld]:val}).then(synced); }
+  }
+});
 // MODE
 let apart=false;
 W.doSwitch=()=>{ apart=!apart; applyMode(); sync(); set(ref(db,'settings/mode'),apart?'apart':'together').then(synced); };
@@ -756,7 +780,7 @@ onValue(ref(db,'settings/countdown'),s=>{
   const days=Math.ceil((new Date(d.date)-new Date())/86400000);
   const bar=document.getElementById('cbar');
   if(days>0) bar.textContent='✈️  '+days+' day'+(days!==1?'s':'')+' until you meet · '+d.city+'  —  tap to edit';
-  else if(days===0) bar.textContent='🎉 Today's the day! '+d.city;
+  else if(days===0) bar.textContent="🎉 Today's the day! "+d.city;
   else bar.textContent='💜 You were in '+d.city+'  —  tap to update';
 });
 W.doSaveCd=()=>{
@@ -769,11 +793,16 @@ W.doSaveCd=()=>{
 let shopD={};
 onValue(ref(db,'shopping'),s=>{shopD=s.val()||{};renderShop();});
 function renderShop(){
-  document.getElementById('shlist').innerHTML=Object.entries(shopD).sort((a,b)=>a[1].ts-b[1].ts).map(([k,i])=>
-    '<div class="shi '+(i.done?'done':'')+'" onclick="_toggleShop(''+k+'')">'
-    +'<div class="chk"></div><span class="shn">'+i.text+'</span>'
-    +'<span class="shd" onclick="event.stopPropagation();_delShop(''+k+'')">×</span></div>'
-  ).join('');
+  var el=document.getElementById('shlist');if(!el)return;
+  el.innerHTML='';
+  Object.entries(shopD).sort((a,b)=>a[1].ts-b[1].ts).forEach(([k,i])=>{
+    var d=document.createElement('div');
+    d.className='shi'+(i.done?' done':'');
+    d.innerHTML='<div class="chk"></div><span class="shn">'+i.text+'</span><span class="shd">x</span>';
+    d.onclick=()=>W.doTogShop(k);
+    d.querySelector('.shd').onclick=(e)=>{e.stopPropagation();W.doDelShop(k);};
+    el.appendChild(d);
+  });
 }
 W.doAddItem=()=>{const i=document.getElementById('shi'),v=i.value.trim();if(!v)return;sync();push(ref(db,'shopping'),{text:v,done:false,ts:Date.now()}).then(synced);i.value='';};
 W.doTogShop=k=>{sync();update(ref(db,'shopping/'+k),{done:!shopD[k].done}).then(synced);};
@@ -783,21 +812,12 @@ W.doDelShop=k=>{sync();remove(ref(db,'shopping/'+k)).then(synced);};
 const TC2={Film:'#7B5EA7',Series:'#2A9D8F',Play:'#C2607A',Concert:'#D4854A',Other:'#888'};
 let watchD={};const opens={};
 function avg(a,b){const v=[a,b].filter(x=>x>0);return v.length?(v.reduce((s,x)=>s+x,0)/v.length).toFixed(1):'—';}
-function dots(sc,path,fld){return Array.from({length:10},(_,i)=>'<div class="db'+(i<sc?' on':'')+'" onclick="_rate(''+path+'',''+fld+'','+(i+1)+')">'+( i+1)+'</div>').join('');}
-W.doRate=(path,fld,val)=>{sync();update(ref(db,path),{[fld]:val}).then(synced);};
-W.doTogOpen=id=>{opens[id]=!opens[id];renderWatched();renderRest();};
-onValue(ref(db,'watched'),s=>{watchD=s.val()||{};renderWatched();});
-function renderWatched(){
-  document.getElementById('wlist').innerHTML=Object.entries(watchD).sort((a,b)=>b[1].ts-a[1].ts).map(([k,w])=>{
-    const a=avg(w.annaR||0,w.utkuR||0),op=opens['w_'+k];
-    return '<div class="wi"><div class="wt" onclick="_toggleOpen('w_'+k+'')">'
-      +'<div class="wtd" style="background:'+(TC2[w.type]||'#888')+'"></div>'
-      +'<div class="wi2"><div class="wti">'+w.title+'</div><div class="wm">'+w.type+'</div></div>'
-      +(w.status==='seen'?'<div class="ap">'+(a==='—'?'Rate ▾':a+' ▾')+'</div>':'<span class="wb ww">Watchlist</span>')
-      +'</div>'
-      +(w.status==='seen'?'<div class="rb'+(op?' on':'')+'"><div class="rr"><div class="rn">Anna</div><div class="sd">'+dots(w.annaR||0,'watched/'+k,'annaR')+'</div><div class="sv">'+(w.annaR||'—')+'</div></div><div class="rr"><div class="rn">Utku</div><div class="sd">'+dots(w.utkuR||0,'watched/'+k,'utkuR')+'</div><div class="sv">'+(w.utkuR||'—')+'</div></div><div class="ar2"><div class="al">Avg</div><div class="av">'+a+'</div><div class="avu">/ 10</div></div></div>':'')
-      +'</div>';
-  }).join('');
+function dots(sc,path,fld){
+  var html='';
+  for(var i=0;i<10;i++){
+    html+='<div class="db'+(i<sc?' on':'')+'" data-path="'+path+'" data-fld="'+fld+'" data-val="'+(i+1)+'">'+( i+1)+'</div>';
+  }
+  return html;
 }
 W.doAddWatched=()=>{const i=document.getElementById('wi'),v=i.value.trim();if(!v)return;sync();push(ref(db,'watched'),{title:v,type:W.selType,status:W.selStatus,annaR:0,utkuR:0,ts:Date.now()}).then(synced);i.value='';};
 
@@ -805,10 +825,15 @@ W.doAddWatched=()=>{const i=document.getElementById('wi'),v=i.value.trim();if(!v
 let bookD={};
 onValue(ref(db,'books'),s=>{bookD=s.val()||{};renderBooks();});
 function renderBooks(){
-  const cols=['#7B5EA7','#C2607A','#4A6FA5','#2E9E6B','#D4854A'];
-  document.getElementById('blist').innerHTML=Object.entries(bookD).sort((a,b)=>b[1].ts-a[1].ts).map(([k,b])=>
-    '<div class="bk"><div class="bsp" style="background:'+b.color+'"></div><div class="bi"><div class="bt">'+b.title+'</div><div class="bm">'+(b.author||'')+'</div></div><span class="wb '+(b.status==='done'?'ws':'ww')+'">'+(b.status==='done'?'Done':'Reading')+'</span></div>'
-  ).join('');
+  var el=document.getElementById('blist');if(!el)return;
+  el.innerHTML='';
+  Object.entries(bookD).sort((a,b)=>b[1].ts-a[1].ts).forEach(([k,b])=>{
+    var d=document.createElement('div');d.className='bk';
+    d.innerHTML='<div class="bsp" style="background:'+b.color+'"></div>'
+      +'<div class="bi"><div class="bt">'+b.title+'</div><div class="bm">'+(b.author||'')+'</div></div>'
+      +'<span class="wb '+(b.status==='done'?'ws':'ww')+'">'+(b.status==='done'?'Done':'Reading')+'</span>';
+    el.appendChild(d);
+  });
 }
 W.doAddBook=st=>{const i=document.getElementById('bi'),v=i.value.trim();if(!v)return;const cs=['#7B5EA7','#C2607A','#4A6FA5','#2E9E6B','#D4854A'];sync();push(ref(db,'books'),{title:v,author:'',status:st,color:cs[Math.floor(Math.random()*cs.length)],ts:Date.now()}).then(synced);i.value='';};
 
@@ -817,18 +842,29 @@ let restD={ffood:{},fcoffee:{},wfood:{},wcoffee:{}};
 onValue(ref(db,'restaurants'),s=>{restD=Object.assign({ffood:{},fcoffee:{},wfood:{},wcoffee:{}},s.val()||{});renderRest();});
 W.renderRest=renderRest;
 function renderRest(){
-  document.getElementById('rlist').innerHTML=Object.entries(restD[W.selCat]||{}).sort((a,b)=>b[1].ts-a[1].ts).map(([k,r])=>{
-    const a=avg(r.annaR||0,r.utkuR||0),op=opens['r_'+k];
-    return '<div class="ri"><div class="rt2" onclick="_toggleOpen('r_'+k+'')">'
-      +'<div class="ri2"><div class="rn2">'+r.name+'</div><div class="rm">'+(r.meta||'')+'</div>'
-      +(r.gmaps?'<div class="rg"><span class="gs">★</span><span class="gsc">'+r.gmaps+'</span><span class="gl">Google Maps</span></div>':'')
+  var el=document.getElementById('rlist');if(!el)return;el.innerHTML='';
+  Object.entries(restD[W.selCat]||{}).sort((a,b)=>b[1].ts-a[1].ts).forEach(function(entry){
+    var k=entry[0],r=entry[1];
+    var a=avg(r.annaR||0,r.utkuR||0),op=opens['r_'+k];
+    var d=document.createElement('div');d.className='ri';
+    var top=document.createElement('div');top.className='rt2';
+    top.innerHTML='<div class="ri2"><div class="rn2">'+r.name+'</div><div class="rm">'+(r.meta||'')+'</div>'
+      +(r.gmaps?'<div class="rg"><span class="gs">&#9733;</span><span class="gsc">'+r.gmaps+'</span><span class="gl">Google Maps</span></div>':'')
       +'</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'
       +(r.visited?'<span class="vb">Visited</span>':'<span class="uvb">Want to go</span>')
-      +(r.visited?'<div class="ap">'+(a==='—'?'Rate ▾':a+' ▾')+'</div>':'')
-      +'</div></div>'
-      +(r.visited?'<div class="rb'+(op?' on':'')+'"><div class="rr"><div class="rn">Anna</div><div class="sd">'+dots(r.annaR||0,'restaurants/'+W.selCat+'/'+k,'annaR')+'</div><div class="sv">'+(r.annaR||'—')+'</div></div><div class="rr"><div class="rn">Utku</div><div class="sd">'+dots(r.utkuR||0,'restaurants/'+W.selCat+'/'+k,'utkuR')+'</div><div class="sv">'+(r.utkuR||'—')+'</div></div><div class="ar2"><div class="al">Avg</div><div class="av">'+a+'</div><div class="avu">/ 10</div></div></div>':'')
+      +(r.visited?'<div class="ap">'+(a==='---'?'Rate':a)+' &#9660;</div>':'')
       +'</div>';
-  }).join('');
+    top.onclick=(function(key){ return function(){ W.doTogOpen('r_'+key); }; })(k);
+    d.appendChild(top);
+    if(r.visited){
+      var rb=document.createElement('div');rb.className='rb'+(op?' on':'');
+      rb.innerHTML='<div class="rr"><div class="rn">Anna</div><div class="sd">'+dots(r.annaR||0,'restaurants/'+W.selCat+'/'+k,'annaR')+'</div><div class="sv">'+(r.annaR||'-')+'</div></div>'
+        +'<div class="rr"><div class="rn">Utku</div><div class="sd">'+dots(r.utkuR||0,'restaurants/'+W.selCat+'/'+k,'utkuR')+'</div><div class="sv">'+(r.utkuR||'-')+'</div></div>'
+        +'<div class="ar2"><div class="al">Avg</div><div class="av">'+a+'</div><div class="avu">/ 10</div></div>';
+      d.appendChild(rb);
+    }
+    el.appendChild(d);
+  });
 }
 W.doAddRest=()=>{const n=document.getElementById('ri').value.trim();if(!n)return;const gm=parseFloat(document.getElementById('rgi').value)||null;sync();push(ref(db,'restaurants/'+W.selCat),{name:n,meta:'',gmaps:gm,visited:false,annaR:0,utkuR:0,ts:Date.now()}).then(synced);document.getElementById('ri').value='';document.getElementById('rgi').value='';};
 
