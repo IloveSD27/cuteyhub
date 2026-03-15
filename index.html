@@ -481,10 +481,16 @@
 
   async function initTMap(){
     try {
-      const world = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r=>r.json());
-      const topoFeatures = await import('https://cdn.jsdelivr.net/npm/topojson-client@3/+esm').then(m=>{
-        return m.feature(world, world.objects.countries).features;
-      });
+      const [world, topo] = await Promise.all([
+        fetch('https://unpkg.com/world-atlas@2/countries-110m.json').then(r=>r.json()),
+        new Promise(resolve=>{
+          const s=document.createElement('script');
+          s.src='https://unpkg.com/topojson-client@3/dist/topojson-client.min.js';
+          s.onload=()=>resolve(window.topojson);
+          document.head.appendChild(s);
+        })
+      ]);
+      const topoFeatures = topo.feature(world, world.objects.countries).features;
       tsvg.innerHTML='';
       // Simple equirectangular projection
       function project(lon,lat){return [(lon+180)/360*1009,(90-lat)/180*666];}
