@@ -482,10 +482,10 @@
   async function initTMap(){
     try {
       const [world, topo] = await Promise.all([
-        fetch('https://unpkg.com/world-atlas@2/countries-110m.json').then(r=>r.json()),
+        fetch('/map.json').then(r=>r.json()),
         new Promise(resolve=>{
           const s=document.createElement('script');
-          s.src='https://unpkg.com/topojson-client@3/dist/topojson-client.min.js';
+          s.src='https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
           s.onload=()=>resolve(window.topojson);
           document.head.appendChild(s);
         })
@@ -501,7 +501,7 @@
         return d;
       }
       for(const feature of topoFeatures){
-        const name=ISO_NAMES[parseInt(feature.id)];
+        const name=feature.properties&&feature.properties.name?feature.properties.name:ISO_NAMES[parseInt(feature.id)];
         if(!name) continue;
         const p=document.createElementNS('http://www.w3.org/2000/svg','path');
         p.setAttribute('d',geoPath(feature.geometry));
