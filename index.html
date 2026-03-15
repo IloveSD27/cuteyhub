@@ -39,9 +39,6 @@
     .toggle-track.apart-mode .toggle-knob{transform:translateX(22px);background:#fff}
     .countdown-bar{background:var(--apt-accent);color:#fff;text-align:center;padding:8px;font-size:11px;font-weight:500;display:none;flex-shrink:0;cursor:pointer}
     .countdown-bar.visible{display:block}
-    .notif-banner{background:var(--accent);color:#fff;padding:10px 16px;font-size:12px;display:none;align-items:center;gap:10px;flex-shrink:0}
-    .notif-banner.visible{display:flex}
-    .notif-banner button{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
     .screen{display:none;flex:1;flex-direction:column;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
     .screen.active{display:flex}
     .nav{display:flex;background:var(--surface);border-top:1px solid var(--border);padding-top:8px;padding-bottom:max(env(safe-area-inset-bottom),12px);flex-shrink:0;transition:background .5s,border-color .5s}
@@ -158,7 +155,7 @@
     .gmaps-star{color:#F4B400;font-size:12px}
     .gmaps-score{font-size:12px;font-weight:500;color:var(--text)}
     .gmaps-label{font-size:10px;color:var(--muted)}
-    .rest-avg-pill{background:var(--accent);color:#fff;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;flex-shrink:0}
+    .rest-avg-pill{background:var(--accent);color:#fff;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;flex-shrink:0;cursor:pointer}
     .visited-badge{font-size:9px;padding:3px 8px;border-radius:8px;font-weight:500;background:#EDE9FF;color:#5B3FA6}
     .unvisited-badge{font-size:9px;padding:3px 8px;border-radius:8px;font-weight:500;background:var(--bg);color:var(--muted);border:1px solid var(--border)}
     .mem-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
@@ -193,13 +190,7 @@
     </div>
   </div>
   <div class="countdown-bar" id="countdown" onclick="openCountdownModal()">✈️ Tap to set your next meeting</div>
-  <div class="notif-banner" id="notif-banner">
-    <span style="flex:1">Enable notifications to receive hugs & kisses 💜</span>
-    <button onclick="requestNotifPermission()">Enable</button>
-    <button onclick="document.getElementById('notif-banner').classList.remove('visible')" style="background:rgba(255,255,255,.1)">✕</button>
-  </div>
 
-  <!-- HOME -->
   <div class="screen active" id="s-home">
     <div class="sec-title" id="greeting">Good morning, you two</div>
     <div class="sec-sub" id="greeting-sub">So glad you're together.</div>
@@ -220,7 +211,6 @@
     </div>
   </div>
 
-  <!-- ENTERTAINMENT -->
   <div class="screen" id="s-ent">
     <div class="sec-title">Entertainment</div>
     <div class="sec-sub">What you've watched, read & heard.</div>
@@ -272,19 +262,18 @@
     </div>
   </div>
 
-  <!-- CONNECT -->
   <div class="screen" id="s-connect">
     <div class="sec-title">Hey you 💕</div>
     <div class="sec-sub">Send something sweet.</div>
     <div class="hug-grid">
-      <div class="hug-btn" onclick="sendHug('🤗','sent you a hug')"><span class="hb-icon">🤗</span><span class="hb-label">Hug</span></div>
-      <div class="hug-btn" onclick="sendHug('😘','sent you a kiss')"><span class="hb-icon">😘</span><span class="hb-label">Kiss</span></div>
-      <div class="hug-btn" onclick="sendHug('❤️‍🔥','is on fire for you')"><span class="hb-icon">❤️‍🔥</span><span class="hb-label">Fire</span></div>
-      <div class="hug-btn" onclick="sendHug('🌙','says good night')"><span class="hb-icon">🌙</span><span class="hb-label">Night</span></div>
-      <div class="hug-btn" onclick="sendHug('☕','says good morning')"><span class="hb-icon">☕</span><span class="hb-label">Morning</span></div>
-      <div class="hug-btn" onclick="sendHug('🌹','sent you roses')"><span class="hb-icon">🌹</span><span class="hb-label">Roses</span></div>
-      <div class="hug-btn" onclick="sendHug('✨','is thinking of you')"><span class="hb-icon">✨</span><span class="hb-label">Magic</span></div>
-      <div class="hug-btn" onclick="sendHug('💜','loves you')"><span class="hb-icon">💜</span><span class="hb-label">Love</span></div>
+      <div class="hug-btn" onclick="sendHug('🤗','Hug')"><span class="hb-icon">🤗</span><span class="hb-label">Hug</span></div>
+      <div class="hug-btn" onclick="sendHug('😘','Kiss')"><span class="hb-icon">😘</span><span class="hb-label">Kiss</span></div>
+      <div class="hug-btn" onclick="sendHug('❤️‍🔥','Fire')"><span class="hb-icon">❤️‍🔥</span><span class="hb-label">Fire</span></div>
+      <div class="hug-btn" onclick="sendHug('🌙','Night')"><span class="hb-icon">🌙</span><span class="hb-label">Night</span></div>
+      <div class="hug-btn" onclick="sendHug('☕','Morning')"><span class="hb-icon">☕</span><span class="hb-label">Morning</span></div>
+      <div class="hug-btn" onclick="sendHug('🌹','Roses')"><span class="hb-icon">🌹</span><span class="hb-label">Roses</span></div>
+      <div class="hug-btn" onclick="sendHug('✨','Magic')"><span class="hb-icon">✨</span><span class="hb-label">Magic</span></div>
+      <div class="hug-btn" onclick="sendHug('💜','Love')"><span class="hb-icon">💜</span><span class="hb-label">Love</span></div>
     </div>
     <div class="popup-area" id="popup-area"><span style="font-size:12px;color:var(--muted)">Your emoji appears here</span></div>
     <div class="daily-q">
@@ -295,7 +284,6 @@
     </div>
   </div>
 
-  <!-- HOUSEKEEPING -->
   <div class="screen" id="s-house">
     <div class="sec-title">Housekeeping</div>
     <div class="sec-sub">What do you need?</div>
@@ -303,7 +291,6 @@
     <div class="shopping-list" id="shop-list"></div>
   </div>
 
-  <!-- MEMORY -->
   <div class="screen" id="s-memory">
     <div class="sec-title">Memory Wall</div>
     <div class="sec-sub">Your most beautiful moments.</div>
@@ -340,9 +327,8 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
-  const fbConfig = {
+  const app = initializeApp({
     apiKey:"AIzaSyBDYR4vrVu97IJIJrDom_6mEZiFibn6eys",
     authDomain:"cuteyhub.firebaseapp.com",
     databaseURL:"https://cuteyhub-default-rtdb.europe-west1.firebasedatabase.app",
@@ -350,54 +336,8 @@
     storageBucket:"cuteyhub.firebasestorage.app",
     messagingSenderId:"631463559935",
     appId:"1:631463559935:web:37091bc36906f66d55c2ca"
-  };
-  const VAPID = "BDS391CEswPljypo3oObUdVIJ5M5zVeEPxwGYUI4LpJsJ32yBrLKfwhCXTJ0JEsmGGcm__9YLy-JqYDo39JmsUw";
-
-  const fbApp = initializeApp(fbConfig);
-  const db = getDatabase(fbApp);
-  let messaging = null;
-
-  // Register service worker & init messaging
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/sw.js').then(reg => {
-      try {
-        messaging = getMessaging(fbApp);
-        // Show banner if not yet granted
-        if(Notification.permission === 'default'){
-          document.getElementById('notif-banner').classList.add('visible');
-        } else if(Notification.permission === 'granted'){
-          setupFCMToken();
-        }
-        // Foreground messages
-        onMessage(messaging, payload => {
-          const area = document.getElementById('popup-area');
-          const emoji = payload.notification?.title?.split(' ')[0] || '💜';
-          area.innerHTML = `<span class="popup-msg">${emoji}</span>`;
-          setTimeout(()=>{ area.innerHTML=`<span style="font-size:12px;color:var(--muted)">${payload.notification?.body||''} 💜</span>`; }, 2000);
-        });
-      } catch(e){ console.log('FCM not available:', e); }
-    });
-  }
-
-  window.requestNotifPermission = async () => {
-    const perm = await Notification.requestPermission();
-    document.getElementById('notif-banner').classList.remove('visible');
-    if(perm === 'granted') setupFCMToken();
-  };
-
-  async function setupFCMToken(){
-    if(!messaging) return;
-    try {
-      const token = await getToken(messaging, { vapidKey: VAPID });
-      if(token){
-        // Store token — we'll use "anna" as the key for this device
-        // In a real app you'd identify users properly
-        const deviceKey = localStorage.getItem('cuteyhub_device') || (Math.random() > 0.5 ? 'anna' : 'utku');
-        localStorage.setItem('cuteyhub_device', deviceKey);
-        set(ref(db, `fcmTokens/${deviceKey}`), token);
-      }
-    } catch(e){ console.log('Token error:', e); }
-  }
+  });
+  const db = getDatabase(app);
 
   const syncDot = document.getElementById('sync-dot');
   const sync = () => syncDot.className='sync-dot syncing';
@@ -409,11 +349,13 @@
   const openStates={};
 
   function avgStr(a,b){const v=[a,b].filter(x=>x>0);return v.length?(v.reduce((s,x)=>s+x,0)/v.length).toFixed(1):'—'}
-  function scoreDotsHTML(score,dbPath,field){
+
+  function scoreDotsHTML(score, dbPath, field){
     return Array.from({length:10},(_,i)=>`<div class="dot-btn ${i<score?'lit':''}" onclick="window._rate('${dbPath}','${field}',${i+1})">${i+1}</div>`).join('');
   }
-  window._rate = (path,field,val) => { sync(); update(ref(db,path),{[field]:val}).then(synced); };
-  window._toggleOpen = id => { openStates[id]=!openStates[id]; renderWatched(); renderRest(); };
+
+  window._rate = (path, field, val) => { sync(); update(ref(db, path),{[field]:val}).then(synced); };
+  window._toggleOpen = (id) => { openStates[id]=!openStates[id]; renderWatched(); renderRest(); };
 
   // MODE
   window.switchMode = () => {
@@ -421,11 +363,11 @@
     sync(); set(ref(db,'settings/mode'),isApart?'apart':'together').then(synced);
   };
   onValue(ref(db,'settings/mode'), snap => {
-    const apart=(snap.val()||'together')==='apart';
+    const apart = (snap.val()||'together')==='apart';
     if(apart!==isApart){isApart=apart;applyMode();}
   });
   function applyMode(){
-    const el=document.getElementById('app'),t=document.getElementById('toggle');
+    const el=document.getElementById('app'), t=document.getElementById('toggle');
     if(isApart){
       el.classList.replace('together','apart');t.classList.add('apart-mode');
       document.getElementById('countdown').classList.add('visible');
@@ -446,15 +388,15 @@
   // COUNTDOWN
   onValue(ref(db,'settings/countdown'), snap => {
     const d=snap.val(); if(!d)return;
-    const days=Math.ceil((new Date(d.date)-new Date())/86400000);
+    const days=Math.ceil((new Date(d.date)-new Date())/(86400000));
     const bar=document.getElementById('countdown');
     if(days>0) bar.textContent=`✈️  ${days} day${days!==1?'s':''} until you meet · ${d.city}  —  tap to edit`;
     else if(days===0) bar.textContent=`🎉 Today's the day! ${d.city}  —  tap to edit`;
     else bar.textContent=`💜 You were in ${d.city}  —  tap to update`;
   });
-  window.openCountdownModal=()=>document.getElementById('countdown-modal').classList.add('open');
-  window.closeCountdownModal=()=>document.getElementById('countdown-modal').classList.remove('open');
-  window.saveCountdown=()=>{
+  window.openCountdownModal = () => document.getElementById('countdown-modal').classList.add('open');
+  window.closeCountdownModal = () => document.getElementById('countdown-modal').classList.remove('open');
+  window.saveCountdown = () => {
     const date=document.getElementById('meet-date').value;
     const city=document.getElementById('meet-city').value.trim()||'next stop';
     if(!date)return; sync();
@@ -470,75 +412,127 @@
         <span class="shop-del" onclick="event.stopPropagation();window._delShop('${k}')">×</span>
       </div>`).join('');
   }
-  window.addItem=()=>{const inp=document.getElementById('shop-input'),val=inp.value.trim();if(!val)return;sync();push(ref(db,'shopping'),{text:val,done:false,ts:Date.now()}).then(synced);inp.value='';};
-  window._toggleShop=k=>{sync();update(ref(db,`shopping/${k}`),{done:!shopData[k].done}).then(synced);};
-  window._delShop=k=>{sync();remove(ref(db,`shopping/${k}`)).then(synced);};
+  window.addItem = () => {
+    const inp=document.getElementById('shop-input'), val=inp.value.trim(); if(!val)return;
+    sync(); push(ref(db,'shopping'),{text:val,done:false,ts:Date.now()}).then(synced); inp.value='';
+  };
+  window._toggleShop = k => { sync(); update(ref(db,`shopping/${k}`),{done:!shopData[k].done}).then(synced); };
+  window._delShop = k => { sync(); remove(ref(db,`shopping/${k}`)).then(synced); };
 
   // WATCHED
   onValue(ref(db,'watched'), snap => { watchedData=snap.val()||{}; renderWatched(); });
   function renderWatched(){
     document.getElementById('watched-list').innerHTML=Object.entries(watchedData).sort((a,b)=>b[1].ts-a[1].ts).map(([k,w])=>{
-      const avg=avgStr(w.annaR||0,w.utkuR||0),open=openStates['w_'+k];
-      return `<div class="w-item"><div class="w-top" onclick="window._toggleOpen('w_${k}')"><div class="w-type-dot" style="background:${typeColors[w.type]||'#888'}"></div><div class="w-info"><div class="w-title">${w.title}</div><div class="w-meta">${w.type}</div></div>${w.status==='seen'?`<div class="w-avg-pill">${avg==='—'?'Rate ▾':avg+' ▾'}</div>`:`<span class="w-badge badge-want">Watchlist</span>`}</div>${w.status==='seen'?`<div class="ratings-block ${open?'open':''}"><div class="rater-row"><div class="rater-name">Anna</div><div class="score-dots">${scoreDotsHTML(w.annaR||0,`watched/${k}`,'annaR')}</div><div class="score-val">${w.annaR||'—'}</div></div><div class="rater-row"><div class="rater-name">Utku</div><div class="score-dots">${scoreDotsHTML(w.utkuR||0,`watched/${k}`,'utkuR')}</div><div class="score-val">${w.utkuR||'—'}</div></div><div class="avg-row"><div class="avg-label">Avg</div><div class="avg-val">${avg}</div><div class="avg-sub">/ 10</div></div></div>`:''}</div>`;
+      const avg=avgStr(w.annaR||0,w.utkuR||0); const open=openStates['w_'+k];
+      return `<div class="w-item">
+        <div class="w-top" onclick="window._toggleOpen('w_${k}')">
+          <div class="w-type-dot" style="background:${typeColors[w.type]||'#888'}"></div>
+          <div class="w-info"><div class="w-title">${w.title}</div><div class="w-meta">${w.type}</div></div>
+          ${w.status==='seen'?`<div class="w-avg-pill">${avg==='—'?'Rate ▾':avg+' ▾'}</div>`:`<span class="w-badge badge-want">Watchlist</span>`}
+        </div>
+        ${w.status==='seen'?`<div class="ratings-block ${open?'open':''}">
+          <div class="rater-row"><div class="rater-name">Anna</div><div class="score-dots">${scoreDotsHTML(w.annaR||0,`watched/${k}`,'annaR')}</div><div class="score-val">${w.annaR||'—'}</div></div>
+          <div class="rater-row"><div class="rater-name">Utku</div><div class="score-dots">${scoreDotsHTML(w.utkuR||0,`watched/${k}`,'utkuR')}</div><div class="score-val">${w.utkuR||'—'}</div></div>
+          <div class="avg-row"><div class="avg-label">Avg</div><div class="avg-val">${avg}</div><div class="avg-sub">/ 10</div></div>
+        </div>`:''}
+      </div>`;
     }).join('');
   }
-  window.addWatched=()=>{const inp=document.getElementById('watched-input'),val=inp.value.trim();if(!val)return;sync();push(ref(db,'watched'),{title:val,type:selType,status:selStatus,annaR:0,utkuR:0,ts:Date.now()}).then(synced);inp.value='';};
+  window.addWatched = () => {
+    const inp=document.getElementById('watched-input'), val=inp.value.trim(); if(!val)return;
+    sync(); push(ref(db,'watched'),{title:val,type:selType,status:selStatus,annaR:0,utkuR:0,ts:Date.now()}).then(synced); inp.value='';
+  };
 
   // BOOKS
   onValue(ref(db,'books'), snap => { bookData=snap.val()||{}; renderBooks(); });
   function renderBooks(){
-    document.getElementById('book-list').innerHTML=Object.entries(bookData).sort((a,b)=>b[1].ts-a[1].ts).map(([k,b])=>`<div class="book-item"><div class="book-spine" style="background:${b.color}"></div><div class="book-info"><div class="book-title">${b.title}</div><div class="book-meta">${b.author||''}</div></div><span class="w-badge ${b.status==='done'?'badge-seen':'badge-want'}">${b.status==='done'?'Done':'Reading'}</span></div>`).join('');
+    document.getElementById('book-list').innerHTML=Object.entries(bookData).sort((a,b)=>b[1].ts-a[1].ts).map(([k,b])=>`
+      <div class="book-item">
+        <div class="book-spine" style="background:${b.color}"></div>
+        <div class="book-info"><div class="book-title">${b.title}</div><div class="book-meta">${b.author||''}</div></div>
+        <span class="w-badge ${b.status==='done'?'badge-seen':'badge-want'}">${b.status==='done'?'Done':'Reading'}</span>
+      </div>`).join('');
   }
-  window.addBook=status=>{const inp=document.getElementById('book-input'),val=inp.value.trim();if(!val)return;const cols=['#7B5EA7','#C2607A','#4A6FA5','#2E9E6B','#D4854A'];sync();push(ref(db,'books'),{title:val,author:'',status,color:cols[Math.floor(Math.random()*cols.length)],ts:Date.now()}).then(synced);inp.value='';};
+  window.addBook = status => {
+    const inp=document.getElementById('book-input'), val=inp.value.trim(); if(!val)return;
+    const cols=['#7B5EA7','#C2607A','#4A6FA5','#2E9E6B','#D4854A'];
+    sync(); push(ref(db,'books'),{title:val,author:'',status,color:cols[Math.floor(Math.random()*cols.length)],ts:Date.now()}).then(synced); inp.value='';
+  };
 
   // RESTAURANTS
   onValue(ref(db,'restaurants'), snap => { restData=Object.assign({ffood:{},fcoffee:{},wfood:{},wcoffee:{}},snap.val()||{}); renderRest(); });
   function renderRest(){
-    document.getElementById('rest-list').innerHTML=Object.entries(restData[selRestCat]||{}).sort((a,b)=>b[1].ts-a[1].ts).map(([k,r])=>{
-      const avg=avgStr(r.annaR||0,r.utkuR||0),open=openStates['r_'+k];
-      return `<div class="rest-item"><div class="rest-top" onclick="window._toggleOpen('r_${k}')"><div class="rest-info"><div class="rest-name">${r.name}</div><div class="rest-meta">${r.meta||''}</div>${r.gmaps?`<div class="rest-gmaps"><span class="gmaps-star">★</span><span class="gmaps-score">${r.gmaps}</span><span class="gmaps-label">Google Maps</span></div>`:''}</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">${r.visited?`<span class="visited-badge">Visited</span>`:`<span class="unvisited-badge">Want to go</span>`}${r.visited?`<div class="rest-avg-pill">${avg==='—'?'Rate ▾':avg+' ▾'}</div>`:''}</div></div>${r.visited?`<div class="ratings-block ${open?'open':''}"><div class="rater-row"><div class="rater-name">Anna</div><div class="score-dots">${scoreDotsHTML(r.annaR||0,`restaurants/${selRestCat}/${k}`,'annaR')}</div><div class="score-val">${r.annaR||'—'}</div></div><div class="rater-row"><div class="rater-name">Utku</div><div class="score-dots">${scoreDotsHTML(r.utkuR||0,`restaurants/${selRestCat}/${k}`,'utkuR')}</div><div class="score-val">${r.utkuR||'—'}</div></div><div class="avg-row"><div class="avg-label">Avg</div><div class="avg-val">${avg}</div><div class="avg-sub">/ 10</div></div></div>`:''}</div>`;
+    const items=Object.entries(restData[selRestCat]||{}).sort((a,b)=>b[1].ts-a[1].ts);
+    document.getElementById('rest-list').innerHTML=items.map(([k,r])=>{
+      const avg=avgStr(r.annaR||0,r.utkuR||0); const open=openStates['r_'+k];
+      return `<div class="rest-item">
+        <div class="rest-top" onclick="window._toggleOpen('r_${k}')">
+          <div class="rest-info">
+            <div class="rest-name">${r.name}</div>
+            <div class="rest-meta">${r.meta||''}</div>
+            ${r.gmaps?`<div class="rest-gmaps"><span class="gmaps-star">★</span><span class="gmaps-score">${r.gmaps}</span><span class="gmaps-label">Google Maps</span></div>`:''}
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+            ${r.visited?`<span class="visited-badge">Visited</span>`:`<span class="unvisited-badge">Want to go</span>`}
+            ${r.visited?`<div class="rest-avg-pill">${avg==='—'?'Rate ▾':avg+' ▾'}</div>`:''}
+          </div>
+        </div>
+        ${r.visited?`<div class="ratings-block ${open?'open':''}">
+          <div class="rater-row"><div class="rater-name">Anna</div><div class="score-dots">${scoreDotsHTML(r.annaR||0,`restaurants/${selRestCat}/${k}`,'annaR')}</div><div class="score-val">${r.annaR||'—'}</div></div>
+          <div class="rater-row"><div class="rater-name">Utku</div><div class="score-dots">${scoreDotsHTML(r.utkuR||0,`restaurants/${selRestCat}/${k}`,'utkuR')}</div><div class="score-val">${r.utkuR||'—'}</div></div>
+          <div class="avg-row"><div class="avg-label">Avg</div><div class="avg-val">${avg}</div><div class="avg-sub">/ 10</div></div>
+        </div>`:''}
+      </div>`;
     }).join('');
   }
-  window.addRest=()=>{const name=document.getElementById('rest-input').value.trim();if(!name)return;const gm=parseFloat(document.getElementById('rest-gmaps-input').value)||null;sync();push(ref(db,`restaurants/${selRestCat}`),{name,meta:'',gmaps:gm,visited:false,annaR:0,utkuR:0,ts:Date.now()}).then(synced);document.getElementById('rest-input').value='';document.getElementById('rest-gmaps-input').value='';};
+  window.addRest = () => {
+    const name=document.getElementById('rest-input').value.trim(); if(!name)return;
+    const gm=parseFloat(document.getElementById('rest-gmaps-input').value)||null;
+    sync(); push(ref(db,`restaurants/${selRestCat}`),{name,meta:'',gmaps:gm,visited:false,annaR:0,utkuR:0,ts:Date.now()}).then(synced);
+    document.getElementById('rest-input').value=''; document.getElementById('rest-gmaps-input').value='';
+  };
 
-  // CONNECT — with push notifications
+  // CONNECT
   const dqQ=["What's the most beautiful thing that happened to you today?","If you were here right now, what would we do?","What do you love most about us?","What made you smile today?","Which shared memory do you miss the most right now?"];
-  let dqIdx=0, lastHugTs=0;
-
+  let dqIdx=0;
+  let lastHugTs=0;
   onValue(ref(db,'connect/lastHug'), snap => {
     const d=snap.val(); if(!d||d.ts<=lastHugTs)return;
     lastHugTs=d.ts;
     const area=document.getElementById('popup-area');
     area.innerHTML=`<span class="popup-msg">${d.emoji}</span>`;
-    setTimeout(()=>{area.innerHTML=`<span style="font-size:12px;color:var(--muted)">${d.label} 💜</span>`;},2000);
+    setTimeout(()=>{area.innerHTML=`<span style="font-size:12px;color:var(--muted)">${d.label} 💜</span>`},2000);
   });
-
-  window.sendHug = async (emoji, label) => {
-    sync();
-    await set(ref(db,'connect/lastHug'),{emoji,label,ts:Date.now()});
-    // Trigger push via Firebase Function (stored as a pending notification)
-    await set(ref(db,'connect/pendingNotif'),{
-      emoji, label,
-      title: `${emoji} CuteyHub`,
-      body: `Your partner ${label} 💜`,
-      ts: Date.now()
-    });
-    synced();
+  window.sendHug = (emoji, label) => { sync(); set(ref(db,'connect/lastHug'),{emoji,label,ts:Date.now()}).then(synced); };
+  window.submitDQ = () => {
+    const ans=document.getElementById('dq-answer').value.trim(); if(!ans)return;
+    dqIdx=(dqIdx+1)%dqQ.length;
+    document.getElementById('dq-q').textContent='"'+dqQ[dqIdx]+'"';
+    document.getElementById('dq-answer').value='';
+    sendHug('💌','Answer sent!');
   };
 
-  window.submitDQ=()=>{const ans=document.getElementById('dq-answer').value.trim();if(!ans)return;dqIdx=(dqIdx+1)%dqQ.length;document.getElementById('dq-q').textContent='"'+dqQ[dqIdx]+'"';document.getElementById('dq-answer').value='';sendHug('💌','answered today\'s question');};
+  // MEMORY (local)
+  window.addMemory = inp => {
+    const file=inp.files[0]; if(!file)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const grid=document.getElementById('mem-grid'), card=document.createElement('div');
+      card.className='mem-card'; card.innerHTML=`<img src="${e.target.result}"><div class="mem-label">Memory</div>`;
+      grid.insertBefore(card,grid.firstChild);
+    };
+    reader.readAsDataURL(file); inp.value='';
+  };
 
-  // MEMORY
-  window.addMemory=inp=>{const file=inp.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{const grid=document.getElementById('mem-grid'),card=document.createElement('div');card.className='mem-card';card.innerHTML=`<img src="${e.target.result}"><div class="mem-label">Memory</div>`;grid.insertBefore(card,grid.firstChild);};reader.readAsDataURL(file);inp.value='';};
-
-  // UI helpers
-  window.goTo=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');};
-  window.setNav=id=>{document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById(id).classList.add('active');};
-  window.switchEnt=tab=>['watched','books','music','eat'].forEach(t=>{document.getElementById('etab-'+t).classList.toggle('active',t===tab);document.getElementById('sec-'+t).classList.toggle('active',t===tab);});
-  window.selectType=el=>{document.querySelectorAll('.type-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');selType=el.dataset.type;};
-  window.selectStatus=s=>{selStatus=s;document.getElementById('sbtn-seen').classList.toggle('active',s==='seen');document.getElementById('sbtn-want').classList.toggle('active',s==='want');};
-  window.filterRest=el=>{document.querySelectorAll('.rest-filter').forEach(f=>f.classList.remove('active'));el.classList.add('active');selRestCat=el.dataset.cat;renderRest();};
-  window.openLink=url=>window.open(url,'_blank');
+  // UI
+  window.goTo = id => { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
+  window.setNav = id => { document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); document.getElementById(id).classList.add('active'); };
+  window.switchEnt = tab => ['watched','books','music','eat'].forEach(t=>{ document.getElementById('etab-'+t).classList.toggle('active',t===tab); document.getElementById('sec-'+t).classList.toggle('active',t===tab); });
+  window.selectType = el => { document.querySelectorAll('.type-pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); selType=el.dataset.type; };
+  window.selectStatus = s => { selStatus=s; document.getElementById('sbtn-seen').classList.toggle('active',s==='seen'); document.getElementById('sbtn-want').classList.toggle('active',s==='want'); };
+  window.filterRest = el => { document.querySelectorAll('.rest-filter').forEach(f=>f.classList.remove('active')); el.classList.add('active'); selRestCat=el.dataset.cat; renderRest(); };
+  window.openLink = url => window.open(url,'_blank');
 </script>
 </body>
 </html>
+
