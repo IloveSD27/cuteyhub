@@ -263,6 +263,21 @@ body{display:flex;align-items:center;justify-content:center;font-family:'DM Sans
 .ti-date{font-size:10px;color:var(--mu)}
 .ti-date.overdue{color:#C2607A;font-weight:500}
 
+
+/* connect improvements */
+.con-received{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:16px;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.con-lastsent{display:flex;align-items:center;gap:8px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.con-history-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.con-history-title::after{content:'';flex:1;height:1px;background:var(--bd)}
+.con-hist-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--sf);border:1px solid var(--bd);border-radius:11px;margin-bottom:5px}
+.con-hist-emoji{font-size:22px;flex-shrink:0}
+.con-hist-body{flex:1;min-width:0}
+.con-hist-label{font-size:13px;color:var(--tx)}
+.con-hist-time{font-size:10px;color:var(--mu);margin-top:1px}
+.con-hist-who{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:500;flex-shrink:0}
+.who-me{background:var(--bg);color:var(--mu);border:1px solid var(--bd)}
+.who-them{background:#EDE9FF;color:#5B3FA6}
+
 </style>
 </head>
 <body>
@@ -351,8 +366,15 @@ body{display:flex;align-items:center;justify-content:center;font-family:'DM Sans
 
   <!-- CONNECT -->
   <div class="scr" id="s-con">
-    <div class="h1">Hey you 💕</div><div class="sub">Send something sweet.</div>
-    <div class="ra" id="rarea"><span style="font-size:13px;color:var(--mu)">Waiting for something sweet...</span></div>
+    <div class="h1">Hey you 💕</div>
+    <div class="sub">Send something sweet.</div>
+
+    <!-- Received -->
+    <div class="con-received" id="rarea">
+      <span style="font-size:13px;color:var(--mu)">Waiting for something sweet...</span>
+    </div>
+
+    <!-- Send buttons -->
     <div class="sg">
       <div class="sb" id="sb-hug" onclick="sendHug('🤗','sent you a hug','hug')"><span class="si">🤗</span><span class="sl">Hug</span></div>
       <div class="sb" id="sb-kiss" onclick="sendHug('😘','sent you a kiss','kiss')"><span class="si">😘</span><span class="sl">Kiss</span></div>
@@ -361,11 +383,17 @@ body{display:flex;align-items:center;justify-content:center;font-family:'DM Sans
       <div class="sb" id="sb-coffee" onclick="sendHug('☕','thinking of you','coffee')"><span class="si">☕</span><span class="sl">Coffee?</span></div>
       <div class="sb" id="sb-call" onclick="sendHug('📞','wants to call','call')"><span class="si">📞</span><span class="sl">Call me?</span></div>
     </div>
-    <div class="ls" id="lsent" style="display:none">
-      <span style="font-size:11px;color:var(--mu);flex:1">You sent</span>
-      <span id="lse" style="font-size:20px"></span>
-      <span id="lst" style="font-size:10px;color:var(--mu);opacity:.6"></span>
+
+    <!-- Last sent -->
+    <div class="con-lastsent" id="lsent" style="display:none">
+      <span style="font-size:11px;color:var(--mu)">You sent</span>
+      <span id="lse" style="font-size:18px"></span>
+      <span id="lst" style="font-size:11px;color:var(--mu)"></span>
     </div>
+
+    <!-- History -->
+    <div class="con-history-title">History</div>
+    <div id="con-history"></div>
   </div>
 
   <!-- TRAVEL -->
@@ -870,18 +898,102 @@ W.doAddRest=()=>{const n=document.getElementById('ri').value.trim();if(!n)return
 
 // CONNECT
 let lastTs=0;
-function timeAgo(ts){const m=Math.floor((Date.now()-ts)/60000);if(m<1)return'just now';if(m<60)return m+'m ago';return Math.floor(m/60)+'h ago';}
-function showRec(emoji,text,ts){ts=ts||Date.now();document.getElementById('rarea').innerHTML='<span class="re">'+emoji+'</span><span class="rt">'+text+'</span><span class="rtm">'+timeAgo(ts)+'</span>';}
-onValue(ref(db,'connect/lastHug'),s=>{const d=s.val();if(!d||d.ts<=lastTs)return;lastTs=d.ts;showRec(d.emoji,d.label,d.ts);});
+const device = localStorage.getItem('ch_who')||'anna'; // 'anna' or 'utku'
+
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<10) return 'just now';
+  if(s<60) return s+'s ago';
+  const m=Math.floor(s/60);
+  if(m<60) return m+'m ago';
+  const h=Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  const d=Math.floor(h/24);
+  return d+'d ago';
+}
+
+function fmtTimestamp(ts){
+  const d=new Date(ts);
+  const now=new Date();
+  const isToday=d.toDateString()===now.toDateString();
+  const time=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(isToday) return 'Today at '+time;
+  return d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})+' at '+time;
+}
+
+function showRec(emoji,text,ts,fromDevice){
+  ts=ts||Date.now();
+  const isMe = fromDevice===device;
+  const area=document.getElementById('rarea');
+  area.innerHTML='';
+  const emojiEl=document.createElement('span');emojiEl.className='re';emojiEl.textContent=emoji;
+  const textEl=document.createElement('span');textEl.className='rt';textEl.textContent=(isMe?'You '+text:text);
+  const timeEl=document.createElement('span');timeEl.className='rtm';timeEl.textContent=fmtTimestamp(ts);
+  area.appendChild(emojiEl);area.appendChild(textEl);area.appendChild(timeEl);
+  // auto-fade after 10s back to waiting state
+  clearTimeout(window._recTimer);
+  window._recTimer=setTimeout(()=>{
+    area.style.opacity='0.4';
+  }, 10000);
+  area.style.opacity='1';
+}
+
+function renderHistory(items){
+  const el=document.getElementById('con-history');
+  if(!el)return;
+  if(!items||!items.length){el.innerHTML='<div style="font-size:12px;color:var(--mu);text-align:center;padding:12px 0">No messages yet</div>';return;}
+  el.innerHTML='';
+  [...items].reverse().slice(0,20).forEach(item=>{
+    const isMe=item.from===device;
+    const d=document.createElement('div');d.className='con-hist-item';
+    const emoji=document.createElement('span');emoji.className='con-hist-emoji';emoji.textContent=item.emoji;
+    const body=document.createElement('div');body.className='con-hist-body';
+    const label=document.createElement('div');label.className='con-hist-label';
+    label.textContent=isMe?('You '+item.label):item.label;
+    const time=document.createElement('div');time.className='con-hist-time';
+    time.textContent=fmtTimestamp(item.ts);
+    body.appendChild(label);body.appendChild(time);
+    const who=document.createElement('span');who.className='con-hist-who '+(isMe?'who-me':'who-them');
+    who.textContent=isMe?'You':(item.from==='anna'?'Anna':'Utku');
+    d.appendChild(emoji);d.appendChild(body);d.appendChild(who);
+    el.appendChild(d);
+  });
+  // update last-sent
+  const myLast=[...items].reverse().find(i=>i.from===device);
+  if(myLast){
+    document.getElementById('lsent').style.display='flex';
+    document.getElementById('lse').textContent=myLast.emoji;
+    document.getElementById('lst').textContent=fmtTimestamp(myLast.ts);
+  }
+}
+
+// Listen to history (array of last 20)
+onValue(ref(db,'connect/history'),s=>{
+  const hist=s.val()||[];
+  renderHistory(Array.isArray(hist)?hist:Object.values(hist));
+  // Show last received item in the received area
+  const items=Array.isArray(hist)?hist:Object.values(hist);
+  if(items.length){
+    const last=items[items.length-1];
+    if(last.ts>lastTs){lastTs=last.ts;showRec(last.emoji,last.label,last.ts,last.from);}
+  }
+});
 W.doSendHug=async(emoji,label,id)=>{
   const btn=document.getElementById('sb-'+id);
   if(btn){btn.classList.add('sending');setTimeout(()=>btn.classList.remove('sending'),600);}
-  document.getElementById('lsent').style.display='flex';
-  document.getElementById('lse').textContent=emoji;
-  document.getElementById('lst').textContent='just now';
   sync();
-  await set(ref(db,'connect/lastHug'),{emoji,label,ts:Date.now()});
-  await set(ref(db,'connect/pendingNotif'),{emoji,label,title:emoji+' CuteyHub',body:'Your partner '+label+' 💜',ts:Date.now()});
+  const ts=Date.now();
+  const newItem={emoji,label,from:device,ts};
+  // Push to history array
+  const histSnap=await new Promise(res=>onValue(ref(db,'connect/history'),s=>{res(s.val());},{onlyOnce:true}));
+  const hist=Array.isArray(histSnap)?histSnap:(histSnap?Object.values(histSnap):[]);
+  hist.push(newItem);
+  // Keep last 50
+  const trimmed=hist.slice(-50);
+  await set(ref(db,'connect/history'),trimmed);
+  // Also set lastHug for notification trigger
+  await set(ref(db,'connect/lastHug'),{emoji,label,from:device,ts});
+  await set(ref(db,'connect/pendingNotif'),{emoji,label,title:emoji+' CuteyHub',body:'Your partner '+label+' 💜',ts});
   synced();
 };
 
