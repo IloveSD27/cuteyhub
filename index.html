@@ -1023,6 +1023,7 @@ const sd=document.getElementById('sdot');
 const sync=()=>sd.className='sdot busy';
 const synced=()=>sd.className='sdot ok';
 
+// MODE
 let apart=false;
 W.doSwitch=()=>{apart=!apart;applyMode();sync();set(ref(db,'settings/mode'),apart?'apart':'together').then(synced);};
 onValue(ref(db,'settings/mode'),s=>{const a=(s.val()||'together')==='apart';if(a!==apart){apart=a;applyMode();}});
@@ -1032,6 +1033,7 @@ function applyMode(){
   else{app.classList.remove('apart');tt.classList.remove('apart');document.getElementById('cbar').classList.remove('on');document.getElementById('greet').textContent='Good morning, you two';document.getElementById('greet2').textContent="So glad you're together.";document.getElementById('afft').textContent='"Every day I choose you again."';document.getElementById('lt').classList.add('on');document.getElementById('la').classList.remove('on');}
 }
 
+// COUNTDOWN
 onValue(ref(db,'settings/countdown'),s=>{
   const d=s.val();if(!d)return;
   const days=Math.ceil((new Date(d.date)-new Date())/86400000);
@@ -1042,6 +1044,7 @@ onValue(ref(db,'settings/countdown'),s=>{
 });
 W.doSaveCd=()=>{const date=document.getElementById('mdate').value,city=document.getElementById('mcity').value.trim()||'next stop';if(!date)return;sync();set(ref(db,'settings/countdown'),{date,city}).then(()=>{synced();closeModal('countdown');});};
 
+// SHOPPING
 let shopD={};
 onValue(ref(db,'shopping'),s=>{shopD=s.val()||{};renderShop();});
 function renderShop(){
@@ -1057,6 +1060,7 @@ W.doAddItem=()=>{const i=document.getElementById('shi'),v=i.value.trim();if(!v)r
 W.doTogShop=k=>{sync();update(ref(db,'shopping/'+k),{done:!shopD[k].done}).then(synced);};
 W.doDelShop=k=>{sync();remove(ref(db,'shopping/'+k)).then(synced);};
 
+// WATCHED
 const TC2={Film:'#7B5EA7',Series:'#2A9D8F',Play:'#C2607A',Concert:'#D4854A',Other:'#888'};
 let watchD={};const opens={};
 function avg(a,b){const v=[a,b].filter(x=>x>0);return v.length?(v.reduce((s,x)=>s+x,0)/v.length).toFixed(1):'—';}
@@ -1078,6 +1082,7 @@ function renderWatched(){
 }
 W.doAddWatched=()=>{const i=document.getElementById('wi'),v=i.value.trim();if(!v)return;sync();push(ref(db,'watched'),{title:v,type:W.selType,status:W.selStatus,annaR:0,utkuR:0,ts:Date.now()}).then(synced);i.value='';};
 
+// BOOKS
 let bookD={};
 onValue(ref(db,'books'),s=>{bookD=s.val()||{};renderBooks();});
 function renderBooks(){
@@ -1090,6 +1095,7 @@ function renderBooks(){
 }
 W.doAddBook=st=>{const i=document.getElementById('bi'),v=i.value.trim();if(!v)return;const cs=['#7B5EA7','#C2607A','#4A6FA5','#2E9E6B','#D4854A'];sync();push(ref(db,'books'),{title:v,author:'',status:st,color:cs[Math.floor(Math.random()*cs.length)],ts:Date.now()}).then(synced);i.value='';};
 
+// RESTAURANTS
 let restD={ffood:{},fcoffee:{},wfood:{},wcoffee:{}};
 onValue(ref(db,'restaurants'),s=>{restD=Object.assign({ffood:{},fcoffee:{},wfood:{},wcoffee:{}},s.val()||{});renderRest();});
 W.renderRest=renderRest;
@@ -1107,6 +1113,7 @@ function renderRest(){
 }
 W.doAddRest=()=>{const n=document.getElementById('ri').value.trim();if(!n)return;const gm=parseFloat(document.getElementById('rgi').value)||null;sync();push(ref(db,'restaurants/'+W.selCat),{name:n,meta:'',gmaps:gm,visited:false,annaR:0,utkuR:0,ts:Date.now()}).then(synced);document.getElementById('ri').value='';document.getElementById('rgi').value='';};
 
+// CONNECT
 let conLastTs=0;
 onValue(ref(db,'connect/history'),s=>{
   const items=s.val();const arr=Array.isArray(items)?items:(items?Object.values(items):[]);
@@ -1119,7 +1126,7 @@ W.doSendHug=async type=>{
   if(btn){btn.classList.add('sending');setTimeout(()=>btn.classList.remove('sending'),600);}
   sync();
   const ts=Date.now(),nick=conRandomNick(),item={type,emoji:m.emoji,from:device,nick,ts};
-  conShowReceived(item, true); // show sent confirmation immediately
+  conShowReceived(item,true);
   const snap=await new Promise(res=>onValue(ref(db,'connect/history'),s=>res(s.val()),{onlyOnce:true}));
   const hist=Array.isArray(snap)?snap:(snap?Object.values(snap):[]);
   hist.push(item);
@@ -1128,6 +1135,45 @@ W.doSendHug=async type=>{
   synced();
 };
 
+// TRAVEL
+onValue(ref(db,'travel/visited'),s=>{tVisited=s.val()||{};tvUpdStats();tvRenderCGrid();if(tvOpenCont)tvRenderCPanel();});
+onValue(ref(db,'travel/wishlist'),s=>{tWishlist=s.val()||{};});
+W.doToggle=(name,who,mode)=>{
+  const store=mode==='wishlist'?tWishlist:tVisited;
+  if(!store[name])store[name]={anna:false,utku:false};
+  store[name][who]=!store[name][who];
+  if(!store[name].anna&&!store[name].utku)delete store[name];
+  sync();set(ref(db,'travel/'+mode),mode==='wishlist'?tWishlist:tVisited).then(synced);
+  tvUpdStats();tvRenderCGrid();if(tvOpenCont)tvRenderCPanel();
+};
+W.initTravel=()=>{tvUpdStats();tvRenderCGrid();tvRenderTrips();tvRenderWishes();};
+
+// TODOS
+onValue(ref(db,'todos'),s=>{HK_todoData=s.val()||{};renderTodos();});
+W.doAddTodo=()=>{
+  const i=document.getElementById('todo-inp'),v=i.value.trim();if(!v)return;
+  const d=document.getElementById('td').value;
+  sync();push(ref(db,'todos'),{text:v,prio:HK_prio,assignee:HK_assign,deadline:d||'',done:false,ts:Date.now()}).then(()=>{synced();document.getElementById('td').value='';});
+  i.value='';
+};
+W.doTogTodo=k=>{sync();update(ref(db,'todos/'+k),{done:!HK_todoData[k].done}).then(synced);};
+W.doDelTodo=k=>{sync();remove(ref(db,'todos/'+k)).then(synced);};
+
+// RECIPE AI
+W.doGenRecipe=async prompt=>{
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:'Generate a recipe for: "'+prompt+'". Reply ONLY with JSON (no markdown): {"title":"Name","meta":"emoji · time · difficulty","ingrs":["ingredient 1"],"steps":"Method in one paragraph"}'}]})});
+    const data=await resp.json();
+    const recipe=JSON.parse(data.content[0].text.trim().replace(/```json|```/g,''));
+    showRecipe(recipe);document.getElementById('gen-inp').value='';
+  }catch(e){showRecipe({title:'Try again!',meta:'',ingrs:['Try: "chicken and lemon"'],steps:'Type what you feel like eating.'});}
+};
+
+// MEMORY
+W.doAddMem=inp=>{const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{const g=document.getElementById('mgrid'),c=document.createElement('div');c.className='mca';c.innerHTML='<img src="'+e.target.result+'"><div class="mcl">Memory</div>';g.insertBefore(c,g.firstChild);};rd.readAsDataURL(f);inp.value='';};
+</script>
+</body>
+</html>
 
 </body>
 </html>
