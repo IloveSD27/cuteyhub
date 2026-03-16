@@ -217,6 +217,9 @@ body{display:flex;align-items:center;justify-content:center;font-family:'DM Sans
 .wp.utku{background:#2A9D8F;color:#fff;border-color:#2A9D8F}
 .tleg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:var(--mu)}
 .tli{display:flex;align-items:center;gap:4px}.tld{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.mapbox{border-radius:14px;border:1px solid var(--bd);overflow:hidden;background:#B8D4E8;position:relative;margin-bottom:10px}
+#tmap{display:block;width:100%;cursor:grab;touch-action:pan-x pan-y}
+.mtip{position:absolute;background:rgba(20,10,40,.9);color:#fff;padding:4px 10px;border-radius:8px;font-size:11px;pointer-events:none;display:none;white-space:nowrap;z-index:20;font-family:'DM Sans',sans-serif}
 .tobtn{width:100%;padding:11px;border-radius:12px;background:var(--ac);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;-webkit-tap-highlight-color:transparent}
 .twbtn{width:100%;padding:9px;border-radius:12px;background:var(--sf);color:var(--mu);border:1px solid var(--bd);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
 /* memory */
@@ -823,6 +826,187 @@ function conRenderHistory(items){
   }
 }
 
+// ── TRAVEL ────────────────────────────────────────────
+var TV_FLAGS={
+  Albania:'🇦🇱',Austria:'🇦🇹',Belarus:'🇧🇾',Belgium:'🇧🇪','Bosnia and Herzegovina':'🇧🇦',
+  Bulgaria:'🇧🇬',Croatia:'🇭🇷','Czech Republic':'🇨🇿',Denmark:'🇩🇰',Estonia:'🇪🇪',
+  Finland:'🇫🇮',France:'🇫🇷',Germany:'🇩🇪',Greece:'🇬🇷',Hungary:'🇭🇺',
+  Ireland:'🇮🇪',Italy:'🇮🇹',Latvia:'🇱🇻',Lithuania:'🇱🇹',Luxembourg:'🇱🇺',
+  Netherlands:'🇳🇱',Norway:'🇳🇴',Poland:'🇵🇱',Portugal:'🇵🇹',Romania:'🇷🇴',
+  Russia:'🇷🇺',Serbia:'🇷🇸',Slovakia:'🇸🇰',Slovenia:'🇸🇮',Spain:'🇪🇸',
+  Sweden:'🇸🇪',Switzerland:'🇨🇭',Ukraine:'🇺🇦','United Kingdom':'🇬🇧',
+  Afghanistan:'🇦🇫',Armenia:'🇦🇲',Azerbaijan:'🇦🇿',Bangladesh:'🇧🇩',Cambodia:'🇰🇭',
+  China:'🇨🇳',Georgia:'🇬🇪',India:'🇮🇳',Indonesia:'🇮🇩',Iran:'🇮🇷',
+  Iraq:'🇮🇶',Israel:'🇮🇱',Japan:'🇯🇵',Jordan:'🇯🇴',Kazakhstan:'🇰🇿',
+  Kuwait:'🇰🇼',Laos:'🇱🇦',Lebanon:'🇱🇧',Malaysia:'🇲🇾',Mongolia:'🇲🇳',
+  Myanmar:'🇲🇲',Nepal:'🇳🇵','North Korea':'🇰🇵',Oman:'🇴🇲',Pakistan:'🇵🇰',
+  Philippines:'🇵🇭',Qatar:'🇶🇦','Saudi Arabia':'🇸🇦',Singapore:'🇸🇬','South Korea':'🇰🇷',
+  'Sri Lanka':'🇱🇰',Syria:'🇸🇾',Taiwan:'🇹🇼',Thailand:'🇹🇭',Turkey:'🇹🇷',
+  Turkmenistan:'🇹🇲',UAE:'🇦🇪',Uzbekistan:'🇺🇿',Vietnam:'🇻🇳',Yemen:'🇾🇪',
+  Algeria:'🇩🇿',Angola:'🇦🇴',Botswana:'🇧🇼',Cameroon:'🇨🇲',Egypt:'🇪🇬',
+  Ethiopia:'🇪🇹',Ghana:'🇬🇭','Ivory Coast':'🇨🇮',Kenya:'🇰🇪',Libya:'🇱🇾',
+  Morocco:'🇲🇦',Mozambique:'🇲🇿',Nigeria:'🇳🇬',Rwanda:'🇷🇼',Senegal:'🇸🇳',
+  Somalia:'🇸🇴','South Africa':'🇿🇦',Sudan:'🇸🇩',Tanzania:'🇹🇿',Tunisia:'🇹🇳',
+  Uganda:'🇺🇬',Zambia:'🇿🇲',Zimbabwe:'🇿🇼',
+  Argentina:'🇦🇷',Bolivia:'🇧🇴',Brazil:'🇧🇷',Canada:'🇨🇦',Chile:'🇨🇱',
+  Colombia:'🇨🇴','Costa Rica':'🇨🇷',Cuba:'🇨🇺',Ecuador:'🇪🇨',Guatemala:'🇬🇹',
+  Honduras:'🇭🇳',Mexico:'🇲🇽',Nicaragua:'🇳🇮',Panama:'🇵🇦',Paraguay:'🇵🇾',
+  Peru:'🇵🇪','United States':'🇺🇸',Uruguay:'🇺🇾',Venezuela:'🇻🇪',
+  Australia:'🇦🇺',Fiji:'🇫🇯','New Zealand':'🇳🇿','Papua New Guinea':'🇵🇬'
+};
+var TV_CONTS={
+  Europe:{em:'EU',list:['Albania','Austria','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Ireland','Italy','Latvia','Lithuania','Luxembourg','Netherlands','Norway','Poland','Portugal','Romania','Russia','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom']},
+  Asia:{em:'AS',list:['Afghanistan','Armenia','Azerbaijan','Bangladesh','Cambodia','China','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Laos','Lebanon','Malaysia','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Thailand','Turkey','Turkmenistan','UAE','Uzbekistan','Vietnam','Yemen']},
+  Africa:{em:'AF',list:['Algeria','Angola','Botswana','Cameroon','Egypt','Ethiopia','Ghana','Ivory Coast','Kenya','Libya','Morocco','Mozambique','Nigeria','Rwanda','Senegal','Somalia','South Africa','Sudan','Tanzania','Tunisia','Uganda','Zambia','Zimbabwe']},
+  Americas:{em:'AM',list:['Argentina','Bolivia','Brazil','Canada','Chile','Colombia','Costa Rica','Cuba','Ecuador','Guatemala','Honduras','Mexico','Nicaragua','Panama','Paraguay','Peru','United States','Uruguay','Venezuela']},
+  Oceania:{em:'OC',list:['Australia','Fiji','New Zealand','Papua New Guinea']}
+};
+var TV_TC={tog:'#7B5EA7',anna:'#C2607A',utku:'#2A9D8F'};
+var tVisited={}, tWishlist={}, tMe='anna', tvOpenCont=null, tvOpenTrip=null;
+var TV_TRIPS=[
+  {id:1,em:'🇯🇵',name:'Japan',dates:'May 2026',type:'cutey',desc:'Two weeks in Tokyo, Kyoto, Osaka. Bullet trains, ramen, shrines.',tags:['2 weeks','Spring','Booked']},
+  {id:2,em:'🇵🇹',name:'Porto weekend',dates:'Apr 2026',type:'cutey',desc:'Wine, Fado music, Douro riverside.',tags:['4 days']},
+  {id:3,em:'🇳🇴',name:'Norway',dates:'Jun 2026',type:'solo',desc:"Utku's fjord hiking — Bergen to Flåm.",tags:['10 days','Utku solo']},
+  {id:4,em:'🇲🇦',name:'Morocco',dates:'2027',type:'other',desc:'With friends — Marrakech, Sahara.',tags:['2 weeks']}
+];
+var TV_WISHES=[
+  {id:1,em:'🚴',name:'Bikepacking Japan / Korea',type:'Bikepacking'},
+  {id:2,em:'🏔️',name:'Dolomites hiking week',type:'Mountains'},
+  {id:3,em:'🏖️',name:'Maldives someday',type:'Beach'},
+  {id:4,em:'🧳',name:'Balkans road trip',type:'Adventure'}
+];
+var TV_TL={'🗺️':'Trip','🚴':'Bikepacking','🏖️':'Beach','🏔️':'Mountains','🍜':'Food trip','🏙️':'City break','🧳':'Adventure','🚂':'Train journey','🏕️':'Camping'};
+
+function tvSw(t){
+  ['e','p','w'].forEach(function(x){
+    document.getElementById('tv-t-'+x).classList.toggle('on',x===t);
+    document.getElementById('tv-'+x).classList.toggle('on',x===t);
+  });
+}
+function tvSetMe(who){
+  tMe=who;
+  document.getElementById('tv-wp-a').className='tv-wp'+(who==='anna'?' anna':'');
+  document.getElementById('tv-wp-u').className='tv-wp'+(who==='utku'?' utku':'');
+}
+function tvUpdStats(){
+  var t=0,a=0,u=0;
+  Object.values(tVisited).forEach(function(v){if(v.anna&&v.utku)t++;else if(v.anna)a++;else if(v.utku)u++;});
+  document.getElementById('tv-ct').textContent=t;
+  document.getElementById('tv-ca').textContent=a;
+  document.getElementById('tv-cu').textContent=u;
+}
+function tvTogC(name){
+  if(!tVisited[name])tVisited[name]={anna:false,utku:false};
+  tVisited[name][tMe]=!tVisited[name][tMe];
+  if(!tVisited[name].anna&&!tVisited[name].utku)delete tVisited[name];
+  tvUpdStats();tvRenderCGrid();
+  if(tvOpenCont)tvRenderCPanel();
+  if(W.doToggle)W.doToggle(name,tMe,'visited');
+}
+function tvRenderCGrid(){
+  var el=document.getElementById('tv-cgrid');if(!el)return;el.innerHTML='';
+  Object.entries(TV_CONTS).forEach(function(entry){
+    var cont=entry[0],data=entry[1];
+    var total=data.list.length;
+    var tog=data.list.filter(function(c){return tVisited[c]&&tVisited[c].anna&&tVisited[c].utku;}).length;
+    var annaOnly=data.list.filter(function(c){return tVisited[c]&&tVisited[c].anna&&!tVisited[c].utku;}).length;
+    var utkuOnly=data.list.filter(function(c){return tVisited[c]&&!tVisited[c].anna&&tVisited[c].utku;}).length;
+    var done=tog+annaOnly+utkuOnly;
+    var pct=Math.round(done/total*100);
+    var isOpen=tvOpenCont===cont;
+    var barCol=tog>0?TV_TC.tog:annaOnly>0?TV_TC.anna:utkuOnly>0?TV_TC.utku:'var(--bd)';
+    var parts=[];
+    if(tog>0)parts.push('<span class="tv-cwho-tag tv-cwho-tog">Jointly: '+tog+'</span>');
+    if(annaOnly>0)parts.push('<span class="tv-cwho-tag tv-cwho-anna">Anna: '+annaOnly+'</span>');
+    if(utkuOnly>0)parts.push('<span class="tv-cwho-tag tv-cwho-utku">Utku: '+utkuOnly+'</span>');
+    var whoHtml=parts.join('<span class="tv-cwho-sep">·</span>');
+    var d=document.createElement('div');d.className='tv-ccard'+(isOpen?' open':'');
+    d.innerHTML='<div class="tv-ctop"><span class="tv-cbadge">'+data.em+'</span><div><div class="tv-cname">'+cont+'</div><div class="tv-cpct">'+done+'/'+total+' · '+pct+'%</div></div></div>'
+      +'<div class="tv-cbar"><div class="tv-cfill" style="width:'+pct+'%;background:'+barCol+'"></div></div>'
+      +(done>0?'<div class="tv-cwho">'+whoHtml+'</div>':'');
+    (function(c){d.onclick=function(){tvOpenContPanel(c);};})(cont);
+    el.appendChild(d);
+  });
+}
+function tvOpenContPanel(cont){
+  tvOpenCont=tvOpenCont===cont?null:cont;
+  tvRenderCGrid();
+  if(tvOpenCont)tvRenderCPanel();
+  else document.getElementById('tv-cpanel').classList.remove('on');
+}
+function tvRenderCPanel(){
+  var panel=document.getElementById('tv-cpanel');panel.classList.add('on');
+  document.getElementById('tv-cpanel-name').textContent=tvOpenCont;
+  var grid=document.getElementById('tv-cpanel-body');grid.innerHTML='';
+  TV_CONTS[tvOpenCont].list.forEach(function(name){
+    var v=tVisited[name]||{};
+    var mine=!!v[tMe];
+    var partner=(tMe==='anna'&&v.utku)||(tMe==='utku'&&v.anna);
+    var col=mine?(tMe==='anna'?TV_TC.anna:TV_TC.utku):'transparent';
+    var bg=mine?(tMe==='anna'?'#FBEAF0':'#E1F5EE'):'var(--bg)';
+    var flag=TV_FLAGS[name]||'🏳';
+    var d=document.createElement('div');d.className='tv-ci';
+    d.style.background=bg;d.style.borderColor=mine?col:'var(--bd)';
+    d.innerHTML='<span class="tv-ci-flag">'+flag+'</span><span class="tv-ci-name">'+name+'</span>'
+      +(partner?'<span style="font-size:9px;color:#7B5EA7;flex-shrink:0">♡</span>'
+              :'<span class="tv-ci-dot" style="background:'+col+';border-color:'+(mine?col:'var(--bd)')+'"></span>');
+    (function(n){d.onclick=function(){tvTogC(n);};})(name);
+    grid.appendChild(d);
+  });
+  setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'nearest'});},50);
+}
+function tvCloseCPanel(){tvOpenCont=null;document.getElementById('tv-cpanel').classList.remove('on');tvRenderCGrid();}
+function tvRenderTrips(){
+  var el=document.getElementById('tv-tl');if(!el)return;el.innerHTML='';
+  TV_TRIPS.forEach(function(t){
+    var bm={cutey:['CuteyTrip 💜','bc'],solo:['Solo','bs'],other:['With others','bo']};
+    var bd=bm[t.type]||['Trip','bo'];
+    var io=tvOpenTrip===t.id;
+    var c=document.createElement('div');c.className='tv-trip';
+    c.innerHTML='<div class="tv-trip-top" onclick="tvTogTrip('+t.id+')">'
+      +'<div class="tv-trip-em">'+t.em+'</div>'
+      +'<div class="tv-trip-info"><div class="tv-trip-name">'+t.name+'</div><div class="tv-trip-date">'+t.dates+'</div></div>'
+      +'<span class="wb '+bd[1]+'">'+bd[0]+'</span>'
+      +'<span style="font-size:11px;color:var(--bd);flex-shrink:0;transition:transform .25s'+(io?';transform:rotate(180deg)':'')+'">▼</span>'
+      +'</div>'
+      +'<div class="tv-trip-body'+(io?' on':'')+'">'
+      +'<div class="tv-tags">'+t.tags.map(function(g){return '<span class="tv-tag">'+g+'</span>';}).join('')+'</div>'
+      +'<div class="tv-trip-desc">'+t.desc+'</div>'
+      +'</div>';
+    el.appendChild(c);
+  });
+}
+function tvTogTrip(id){tvOpenTrip=tvOpenTrip===id?null:id;tvRenderTrips();}
+function tvAddTrip(){
+  var n=prompt('Destination?');if(!n)return;
+  var tp=prompt('1=CuteyTrip  2=Solo  3=With others','1');
+  var m={'1':'cutey','2':'solo','3':'other'};
+  TV_TRIPS.unshift({id:Date.now(),em:'✈️',name:n,dates:'TBD',type:m[tp]||'cutey',desc:'',tags:[]});
+  tvRenderTrips();
+}
+function tvRenderWishes(){
+  var el=document.getElementById('tv-wl');if(!el)return;el.innerHTML='';
+  TV_WISHES.forEach(function(w){
+    var d=document.createElement('div');d.className='tv-wish';
+    d.innerHTML='<div class="tv-wish-em">'+w.em+'</div>'
+      +'<div class="tv-wish-info"><div class="tv-wish-name">'+w.name+'</div><div class="tv-wish-type">'+w.type+'</div></div>'
+      +'<span class="tv-wish-del" onclick="tvDelWish('+w.id+')">×</span>';
+    el.appendChild(d);
+  });
+}
+function tvAddWish(){
+  var v=document.getElementById('tv-wi').value.trim();if(!v)return;
+  var em=document.getElementById('tv-wsel').value;
+  TV_WISHES.unshift({id:Date.now(),em:em,name:v,type:TV_TL[em]||'Trip'});
+  document.getElementById('tv-wi').value='';tvRenderWishes();
+}
+function tvDelWish(id){TV_WISHES=TV_WISHES.filter(function(w){return w.id!==id;});tvRenderWishes();}
+W.initTravel=function(){
+  if(W.travelInited)return;
+  W.travelInited=true;
+  tvUpdStats();tvRenderCGrid();tvRenderTrips();tvRenderWishes();
+};
+
 var W={selType:'Film',selStatus:'seen',selCat:'ffood'};
 </script>
 <script type="module">
@@ -957,30 +1141,6 @@ W.doSendHug=async type=>{
   await set(ref(db,'connect/pendingNotif'),{title:m.emoji+' CuteyHub',body:nick+' '+m.sentText,ts});
   synced();
 };
-
-
-onValue(ref(db,'todos'),s=>{HK_todoData=s.val()||{};renderTodos();});
-W.doAddTodo=()=>{const i=document.getElementById('todo-inp'),v=i.value.trim();if(!v)return;const d=document.getElementById('td').value;sync();push(ref(db,'todos'),{text:v,prio:HK_prio,assignee:HK_assign,deadline:d||'',done:false,ts:Date.now()}).then(()=>{synced();document.getElementById('td').value='';});i.value='';};
-W.doTogTodo=k=>{sync();update(ref(db,'todos/'+k),{done:!HK_todoData[k].done}).then(synced);};
-W.doDelTodo=k=>{sync();remove(ref(db,'todos/'+k)).then(synced);};
-
-W.doGenRecipe=async prompt=>{
-  try{const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:'Generate a recipe for: "'+prompt+'". Reply ONLY with JSON (no markdown): {"title":"Name","meta":"emoji · time · difficulty","ingrs":["ingredient 1"],"steps":"Method in one paragraph"}'}]})});const data=await resp.json();const recipe=JSON.parse(data.content[0].text.trim().replace(/```json|```/g,''));showRecipe(recipe);document.getElementById('gen-inp').value='';}
-  catch(e){showRecipe({title:'Try again!',meta:'',ingrs:['Try: "chicken and lemon"'],steps:'Type what you feel like eating.'});}
-};
-
-W.doAddMem=inp=>{const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{const g=document.getElementById('mgrid'),c=document.createElement('div');c.className='mca';c.innerHTML='<img src="'+e.target.result+'"><div class="mcl">Memory</div>';g.insertBefore(c,g.firstChild);};rd.readAsDataURL(f);inp.value='';};
-</script>// ── TRAVEL ────────────────────────────────────────────────
-onValue(ref(db,'travel/visited'),s=>{tVisited=s.val()||{};tvUpdStats();tvRenderCGrid();if(tvOpenCont)tvRenderCPanel();});
-onValue(ref(db,'travel/wishlist'),s=>{tWishlist=s.val()||{};});
-W.doToggle=(name,who,mode)=>{
-  const store=mode==='wishlist'?tWishlist:tVisited;
-  if(!store[name])store[name]={anna:false,utku:false};
-  store[name][who]=!store[name][who];
-  if(!store[name].anna&&!store[name].utku)delete store[name];
-  sync();set(ref(db,'travel/'+mode),mode==='wishlist'?tWishlist:tVisited).then(synced);
-};
-
 
 
 </body>
