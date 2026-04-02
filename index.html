@@ -567,6 +567,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:'DM Sans
 </div>
 
 <script>
+var W={selType:'Film',selStatus:'seen',selCat:'ffood'};
 // ── DAILY QUOTES ─────────────────────────────────────
 var Q_TOG=[
 {q:"Every day I choose you again.",a:"Daily reminder",c:"love"},
@@ -1049,7 +1050,6 @@ if(W.travelInited)return;W.travelInited=true;
 tvUpdStats();tvRenderCGrid();tvRenderTrips();tvRenderWishes();
 };
 
-var W={selType:'Film',selStatus:'seen',selCat:'ffood'};
 // Show today's quote on load (together mode by default)
 updateDailyQuote(false);
 </script>
